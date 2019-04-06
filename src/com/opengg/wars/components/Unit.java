@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Unit extends GameObject{
-    String name;
-    String visibleName;
+    String typeName = "";
+    String visibleName = "ladical";
 
-    int armor;
-    int pierceArmor;
+    int armor = 100;
+    int pierceArmor = 1;
 
     float speed = 8f;
 
@@ -35,6 +35,7 @@ public class Unit extends GameObject{
     }
 
     public void update(float delta){
+        super.update(delta);
         if(GGInfo.isServer() || SimonWars.offline){
             if(this.getPosition().xz().subtract(nextNode).length() < 0.2f){
                 if(!path.isEmpty()){
@@ -61,5 +62,21 @@ public class Unit extends GameObject{
     public void setNewPath(List<Vector2f> path){
         nextNode = path.get(0);
         this.path = path;
+    }
+
+    public String getVisibleName() {
+        return visibleName;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getPierceArmor() {
+        return pierceArmor;
+    }
+
+    public float getSpeed() {
+        return speed;
     }
 }
