@@ -11,9 +11,9 @@ public class GUISetup {
         unitGUI = new GUI();
         unitGUI.addItem("background",new GUITexture(Textures.unitMenu,new Vector2f(0.8333f,0.5268f),new Vector2f(0.16666667f,0.47407f)));
         unitGUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.82167f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
-        unitGUI.addItem("stats",new GUIText(Text.from("Health: 100/100 \n\n" +
-                "Attack: 25 \n\n" + "Defense: 124")
-                .size(0.22f),Textures.dFont,new Vector2f(0.84156f,0.77167f)).setLayer(0.5f));
+
+        unitGUI.addItem("stats",new GUIText(Text.from("Enemy Here\n\n Health: 100/100 \n\n" +
+                "Attack: 25 \n\n" + "Defense: 124").size(0.22f),Textures.dFont,new Vector2f(0.84156f,0.77167f)).setLayer(0.5f));
         GUIController.add(unitGUI,"unitGUI");
         builderUI = new GUI();
         builderUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.166667f,1)).setLayer(-1f));
@@ -121,6 +121,12 @@ public class GUISetup {
         mainResourceUI.addItem("people",new GUITexture(Textures.peopleIcon,new Vector2f(0.44453126f,0.9537f),new Vector2f(0.02604f,0.0462f)));
         mainResourceUI.addItem("peopleText", new GUIText(Text.from("1200/1200  Available People: 21").size(0.2f),Textures.dFont,new Vector2f(0.4703125f,0.975f)));
 
+        mainResourceUI.addItem("steel",new GUITexture(Textures.steelIcon,new Vector2f(0,0.8937f),new Vector2f(0.02604f,0.0462f)));
+        mainResourceUI.addItem("steelText", new GUIText(Text.from("12000").size(0.2f),Textures.dFont,new Vector2f(0.02604f,0.895f)));
+        mainResourceUI.addItem("luxury",new GUITexture(Textures.luxuryIcon,new Vector2f(0.08046875f,0.8937f),new Vector2f(0.02604f,0.0462f)));
+        mainResourceUI.addItem("luxuryText", new GUIText(Text.from("12000").size(0.2f),Textures.dFont,new Vector2f(0.11484375f,0.895f)));
+        mainResourceUI.addItem("energy",new GUITexture(Textures.energyIcon,new Vector2f(0.16953126f,0.8937f),new Vector2f(0.02604f,0.0462f)));
+        mainResourceUI.addItem("energyText", new GUIText(Text.from("12000/s").size(0.2f),Textures.dFont,new Vector2f(0.20390625f,0.895f)));
 
         GUIController.add(mainResourceUI,"mainResourceGUI");
         GUIController.activateGUI("mainResourceGUI");

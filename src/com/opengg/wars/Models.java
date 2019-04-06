@@ -5,7 +5,9 @@ import com.opengg.core.model.Model;
 
 public class Models {
     static Model stone;
+    static Model factory;
     public static void init(){
-        stone = Resource.getModel("");
+        factory = Resource.getModel("TheFactory");
+        //stone = Resource.getModel("");
     }
 }
