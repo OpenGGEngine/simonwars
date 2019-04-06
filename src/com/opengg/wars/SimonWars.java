@@ -61,6 +61,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     @Override
     public void setup() {
+        Empire.initialize();
         if(GGInfo.isServer()){
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 NetworkEngine.initializeServer("yeeticus", 25565);
@@ -130,6 +131,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
         if(GGInfo.isServer()){
 
         }else{
+            GUISetup.updateResourceMenu();
             //CommandManager.sendAllCommands();
             //CommandManager.sendCommand(Command.create("yeeticus", "1"));
         }
