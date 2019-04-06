@@ -29,8 +29,8 @@ public class SimonWars extends GGApplication{
             OpenGG.initializeHeadless(new SimonWars());
         }else{
             OpenGG.initialize(new SimonWars(), new WindowInfo()
-                    .setWidth(1920)
-                    .setHeight(1080)
+                    .setWidth(1280)
+                    .setHeight(720)
                     .setVsync(true)
                     .setName("Simon Wars"));
         }
@@ -75,6 +75,8 @@ public class SimonWars extends GGApplication{
             BindController.addBind(ControlType.KEYBOARD, "lookdown", KEY_DOWN);
             BindController.addBind(ControlType.KEYBOARD, "aim", KEY_K);
             Textures.loadTextures();
+            GUISetup.initialize();
+
         }
     }
 
