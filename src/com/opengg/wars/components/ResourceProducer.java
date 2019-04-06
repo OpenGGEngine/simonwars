@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResourceProducer extends Building{
-    GameResource output;
-    int amount;
-
     List<Tuple<GameResource, Integer>> products = new ArrayList<>();
+    List<Tuple<GameResource, Integer>> inputs = new ArrayList<>();
 
     boolean outSet = false;
     boolean inSet = false;
@@ -24,22 +22,16 @@ public class ResourceProducer extends Building{
         super(side);
     }
 
-    public void setOutput(GameResource out, int amount){
-        this.output = out;
-        this.amount = amount;
+    public void addOutput(GameResource out, int amount){
+        products.add(Tuple.of(out, amount));
     }
 
     public void addInput(GameResource in, int amount){
-        products.add(Tuple.of(in, amount));
+        inputs.add(Tuple.of(in, amount));
     }
 
     @Override
     public void update(float delta){
 
-        if(output == GameResource.ENERGY || output == GameResource.ENTERTAINMENT){
-
-        }else{
-
-        }
     }
 }
