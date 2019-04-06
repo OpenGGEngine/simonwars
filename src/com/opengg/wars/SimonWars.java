@@ -13,16 +13,13 @@ import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
 import com.opengg.core.io.input.mouse.MouseController;
 import com.opengg.core.math.FastMath;
-import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.network.NetworkEngine;
 import com.opengg.core.render.text.Text;
 import com.opengg.core.render.texture.Texture;
-import com.opengg.core.render.window.WindowController;
 import com.opengg.core.render.window.WindowInfo;
 import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
-import com.opengg.core.world.components.FreeFlyComponent;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.core.world.components.WorldObject;
 import com.opengg.wars.components.GameObject;
@@ -61,6 +58,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     @Override
     public void setup() {
+        CommandParser.initialize();
         Empire.initialize();
         if(GGInfo.isServer()){
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
@@ -75,17 +73,36 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         Resource.getTexturePath("skybox\\majestic_dn.png"),
                         Resource.getTexturePath("skybox\\majestic_rt.png"),
                         Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
+            MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
 
+            var unit = new Unit(Empire.Side.RED);
+            unit.setPositionOffset(new Vector3f(500, 0, 5));
+            unit.calculateAndUsePath(unit.getPosition().xz());
+            WorldEngine.getCurrent().attach(unit);
+
+
+            WorldEngine.getCurrent().attach(new UserViewComponent(1));
         }else{
             Models.init();
-            WorldEngine.getCurrent().getRenderEnvironment().setSkybox(new Skybox(Texture.getSRGBCubemap(Resource.getTexturePath("skybox\\majestic_ft.png"),
-                    Resource.getTexturePath("skybox\\majestic_bk.png"),
-                    Resource.getTexturePath("skybox\\majestic_up.png"),
-                    Resource.getTexturePath("skybox\\majestic_dn.png"),
-                    Resource.getTexturePath("skybox\\majestic_rt.png"),
-                    Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
-            MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
-            //NetworkEngine.connect("localhost", 25565);
+
+            if(offline){
+                WorldEngine.getCurrent().getRenderEnvironment().setSkybox(new Skybox(Texture.getSRGBCubemap(Resource.getTexturePath("skybox\\majestic_ft.png"),
+                        Resource.getTexturePath("skybox\\majestic_bk.png"),
+                        Resource.getTexturePath("skybox\\majestic_up.png"),
+                        Resource.getTexturePath("skybox\\majestic_dn.png"),
+                        Resource.getTexturePath("skybox\\majestic_rt.png"),
+                        Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
+                MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
+                WorldEngine.getCurrent().attach(new UserViewComponent(0));
+
+                var unit = new Unit(Empire.Side.RED);
+                unit.setPositionOffset(new Vector3f(500, 0, 5));
+                unit.calculateAndUsePath(unit.getPosition().xz());
+                WorldEngine.getCurrent().attach(unit);
+
+            }else{
+                NetworkEngine.connect("localhost", 25565);
+            }
 
             BindController.addBind(ControlType.KEYBOARD, "forward", KEY_W);
             BindController.addBind(ControlType.KEYBOARD, "backward", KEY_S);
@@ -101,20 +118,10 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             Textures.loadTextures();
             GUISetup.initialize();
 
-            var star = new AStar(512,512, new Node(500,2), new Node(500,110));
-            star.setBlocks(blockers);
-            var info = star.findPath().stream().map(n -> new Vector2f(n.getRow(), n.getCol())).collect(Collectors.toList());
-
-            var unit = new Unit(Empire.Side.RED);
-            unit.setPositionOffset(new Vector3f(info.get(0).x, 0, info.get(0).y));
-            unit.setNewPath(info);
-
-            WorldEngine.getCurrent().attach(new UserViewComponent());
             GhostComponent dragable = new GhostComponent();
             dragable.setModel(Resource.getModel("TheFactory"));
             WorldEngine.getCurrent().attach(dragable);
 
-            WorldEngine.getCurrent().attach(unit);
             WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20,600f,20)).setScaleOffset(new Vector3f(2f)));
             MouseController.onButtonPress(this);
             MouseController.onButtonPress(dragable);
@@ -128,12 +135,11 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     @Override
     public void update(float delta) {
+        CommandManager.update();
         if(GGInfo.isServer()){
 
         }else{
             GUISetup.updateResourceMenu();
-            //CommandManager.sendAllCommands();
-            //CommandManager.sendCommand(Command.create("yeeticus", "1"));
         }
     }
 
@@ -171,8 +177,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 if(selected.size() == 1){
                     if(selected.get(0) instanceof Unit){
                         var unit = (Unit) selected.get(0);
-                        CommandManager.sendCommand(Command.create("unit_move", unit.getName()));
-                        unit.calculateAndUsePath(pos.xz());
+                        CommandManager.sendCommand(Command.create("unit_move", Integer.toString(unit.getId()), pos.x + "," + pos.z));
                     }
                 }
             }
