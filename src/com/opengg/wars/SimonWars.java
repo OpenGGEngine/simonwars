@@ -19,6 +19,7 @@ import com.opengg.core.render.window.WindowInfo;
 import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.FreeFlyComponent;
+import com.opengg.core.world.components.ModelComponent;
 import com.opengg.core.world.components.WorldObject;
 import com.opengg.wars.components.Unit;
 import com.opengg.wars.components.UserViewComponent;
@@ -66,6 +67,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
 
         }else{
+            Models.init();
             WorldEngine.getCurrent().getRenderEnvironment().setSkybox(new Skybox(Texture.getSRGBCubemap(Resource.getTexturePath("skybox\\majestic_ft.png"),
                     Resource.getTexturePath("skybox\\majestic_bk.png"),
                     Resource.getTexturePath("skybox\\majestic_up.png"),
@@ -98,9 +100,14 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             unit.setNewPath(info);
 
             WorldEngine.getCurrent().attach(new UserViewComponent());
+            GhostComponent dragable = new GhostComponent();
+            dragable.setModel(Resource.getModel("pear"));
+            WorldEngine.getCurrent().attach(dragable);
 
             WorldEngine.getCurrent().attach(unit);
+            WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20,600f,20)).setScaleOffset(new Vector3f(2f)));
             MouseController.onButtonPress(this);
+            MouseController.onButtonPress(dragable);
         }
     }
 
