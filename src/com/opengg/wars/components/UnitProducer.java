@@ -17,7 +17,7 @@ import java.util.List;
 public class UnitProducer extends Building{
     Vector2f dropoffPoint;
 
-    List<Tuple<List<Tuple<GameResource, Integer>>, Unit.UType>> unitCreations = new ArrayList<>();
+    public List<Tuple<List<Tuple<GameResource, Integer>>, Unit.UType>> unitCreations = new ArrayList<>();
 
     public List<Unit.UType> unitQueue = new ArrayList<>();
 
