@@ -84,8 +84,16 @@ public class CommandManager {
 
 
     public static void update(){
-        if(!GGInfo.isServer()){
+        if(SimonWars.offline){
+            for(var command : clientCommandsCached){
+                var listeners = commandUsers.getOrDefault(command.command, List.of());
+                listeners.forEach(c -> c.accept(command));
+            }
+            clientCommandsCached.clear();
+        }else if(!GGInfo.isServer()){
             sendAllCommands();
         }
+
+
     }
 }
