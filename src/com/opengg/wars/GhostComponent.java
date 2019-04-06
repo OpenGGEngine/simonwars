@@ -8,8 +8,10 @@ import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.components.Building;
+import com.opengg.wars.game.Empire;
 
 public class GhostComponent extends ModelComponent implements MouseButtonListener {
+    Building.BType type = Building.BType.FACTORY;
 
     public Vector2f[] collisions = {new Vector2f(0,0)};
     @Override
@@ -29,7 +31,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
                 int xPos = x+(int)check.x; int zPos = z+(int)check.y;
                 if(xPos > SimonWars.map.length || xPos<0||zPos<0||zPos>SimonWars.map[0].length)return;
                 if(!SimonWars.map[xPos][zPos]) return;
-                CommandManager.sendCommand(Command.create("building_create", x+","+z, Building.BType.FACTORY.toString()));
+                CommandManager.sendCommand(Command.create("building_create",  type.toString(), x+","+z, SimonWars.side.toString()));
             }
         }
     }
