@@ -5,6 +5,9 @@ import com.opengg.core.engine.BindController;
 import com.opengg.core.engine.GGApplication;
 import com.opengg.core.engine.OpenGG;
 import com.opengg.core.engine.Resource;
+import com.opengg.core.gui.GUIController;
+import com.opengg.core.gui.GUIProgressBar;
+import com.opengg.core.gui.GUIText;
 import com.opengg.core.io.ControlType;
 import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
@@ -13,6 +16,7 @@ import com.opengg.core.math.FastMath;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.network.NetworkEngine;
+import com.opengg.core.render.text.Text;
 import com.opengg.core.render.texture.Texture;
 import com.opengg.core.render.window.WindowController;
 import com.opengg.core.render.window.WindowInfo;
@@ -20,10 +24,13 @@ import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.FreeFlyComponent;
 import com.opengg.core.world.components.WorldObject;
+import com.opengg.wars.components.GameObject;
 import com.opengg.wars.components.Unit;
 import com.opengg.wars.components.UserViewComponent;
 import com.opengg.wars.game.Empire;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.opengg.core.io.input.keyboard.Key.*;
@@ -35,7 +42,9 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static int[][] blockers;
 
     public static boolean offline = true;
-    private Unit unit;
+    public static List<GameObject> selected = new ArrayList<>();
+
+    public static Empire.Side side = Empire.Side.RED;
 
     public static void main(String... args){
         if(args.length > 0 && args[0].equals("server")){
@@ -93,7 +102,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             star.setBlocks(blockers);
             var info = star.findPath().stream().map(n -> new Vector2f(n.getRow(), n.getCol())).collect(Collectors.toList());
 
-            unit = new Unit(Empire.Side.RED);
+            var unit = new Unit(Empire.Side.RED);
             unit.setPositionOffset(new Vector3f(info.get(0).x, 0, info.get(0).y));
             unit.setNewPath(info);
 
@@ -123,11 +132,47 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public void onButtonPress(int button) {
         if(button == MouseButton.LEFT){
             var ray = MouseController.getRay();
+            var allfound = WorldEngine.getCurrent()
+                    .getAllDescendants()
+                    .stream()
+                    .filter(c -> c instanceof GameObject)
+                    .map(c -> (GameObject)c)
+                    .filter(c -> c.getSide() == side)
+                    .filter(c -> FastMath.closestPointTo(ray.getPos(), ray.getPos().add(ray.getDir()), c.getPosition(), false).distanceTo(c.getPosition()) < c.getColliderWidth())
+                    .collect(Collectors.toList());
+
+            selected.clear();
+            if(allfound.isEmpty()){
+                GUIController.deactivateGUI("unitGUI");
+            }else{
+                selected.addAll(allfound);
+                if(allfound.size() == 1){
+                    if(allfound.get(0) instanceof Unit){
+                        var unit = (Unit) allfound.get(0);
+                        GUIController.activateGUI("unitGUI");
+                        var gui = GUIController.get("unitGUI");
+                        ((GUIProgressBar)gui.getRoot().getItem("health")).setPercent((float)unit.getHealth()/unit.getMaxhealth());
+                        ((GUIText)gui.getRoot().getItem("stats")).setText(Text.from(
+                                unit.getVisibleName() + "\n" +
+                                "Health: " + unit.getHealth() + "/" + unit.getMaxhealth()  + "\n\n" +
+                                "Armor: " + unit.getArmor() + ", Pierce Armor: " + unit.getPierceArmor()
+                                ));
+                    }
+                }
+            }
         }
         if(button == MouseButton.RIGHT){
             var ray = MouseController.getRay();
             var pos = FastMath.getRayPlaneIntersection(ray.getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
-            unit.calculateAndUsePath(pos.xz());
+            if(!SimonWars.selected.isEmpty()){
+                if(selected.size() == 1){
+                    if(selected.get(0) instanceof Unit){
+                        var unit = (Unit) selected.get(0);
+                        CommandManager.sendCommand(Command.create("unit_move", unit.getName()));
+                        unit.calculateAndUsePath(pos.xz());
+                    }
+                }
+            }
         }
     }
 
