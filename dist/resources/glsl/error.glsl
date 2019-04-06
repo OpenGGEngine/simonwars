@@ -1,9 +1,4 @@
-COMPILED GGSL ERROR SOURCE: From shader tangent.frag with error code 0: 
-Shader Compile Log:
-Fragment shader failed to compile with the following errors:
-ERROR: 0:180: error(#322) The: vertexData definition contradicts
-ERROR: 0:188: error(#174) Not enough data provided for construction constructor
-ERROR: error(#273) 2 compilation errors.  No code generated
+COMPILED GGSL ERROR SOURCE: From shader terrainmulti.frag with error code 0: 0(184) : error C7011: implicit cast from "float" to "vec2"
 #version 420
 layout(location=0) out vec4 fcolor;
 in vertexData {
@@ -77,7 +72,6 @@ return shadow;
 }else{
 vec4 lightspacePos = (light.perspective * (light.view * vec4(pos, 1.0f)));
 vec3 projCoords = lightspacePos.xyz;
-;
 projCoords = ((projCoords * 0.5f) + 0.5f);
 float closestDepth = texture(shadowmap, projCoords.xy).r;
 vec3 lightDir = normalize((light.lightpos.xyz - pos.xyz));
@@ -178,32 +172,40 @@ float cosTheta = max(dot(n, lightDir), 0.0f);
 vec3 fdif = (diffuse * cosTheta);
 float cosAlpha = max(dot(n, halfwayDir), 0.0f);
 vec3 fspec = (specular * pow(cosAlpha, specpow));
-float shadowcover = 1;
+float shadowcover = getShadowCoverage(light);
 vec3 fragColor = ((((fdif + fspec) * attenuation) * shadowcover) * light.color.rgb);
 return fragColor;
 } 
 
-in vertexData {
-vec3 tan;
-} ;
-
-uniform Material material;
+uniform sampler2DArray terrain;
+uniform vec3 scale;
 void main() {
+vec4 blendMapColor = getTex(Ka);
+float backTextureAmount = (1 - ((blendMapColor.r + blendMapColor.b) + blendMapColor.g));
+vec2 tiledMapEditor = textureCoord.x;
+vec4 wcolor = (texture(terrain, vec3(tiledMapEditor, 0)) * backTextureAmount);
+vec4 wcolorr = (texture(terrain, vec3(tiledMapEditor, 1)) * blendMapColor.r);
+vec4 wcolorg = (texture(terrain, vec3(tiledMapEditor, 2)) * blendMapColor.g);
+vec4 wcolorb = (texture(terrain, vec3(tiledMapEditor, 3)) * blendMapColor.b);
+vec4 finalColor = (((wcolor + wcolorr) + wcolorg) + wcolorb);
 generatePhongData();
-useMaterial(material);
-vec3 T = normalize(vec3((model * vec4(tan, 0.0f))));
-vec3 N = normalize(vec3((model * vec4(norm, 0.0f))));
-vec3 B = normalize(cross(T, N));
-mat3 TBN = mat3(T, B, N);
-n = ((texture(bump, textureCoord).rgb * material.hasnormmap) + (norm * (1 - material.hasnormmap)));
-n = normalize(((n * 2.0f) - 1.0f));
-n = normalize((TBN * n));
+Material material;
+material.hasnormmap = 0.0f;
+material.hasambmap = 0.0f;
+material.hasspec = 0.0f;
+material.hasspecpow = 0.0f;
+material.hascolormap = 1.0f;
+material.hasem = 0.0f;
+material.ks = vec3(1, 1, 1);
+material.ka = vec3(0, 0, 0);
+material.kd = vec3(0, 0, 0);
+material.ns = 128;
+useMaterial(material, finalColor);
 vec3 col = ambient;
-col += emmisive;
-for(int i = 0; (i < numLights); i++){
+for(int i = 0; (i < 1); i++){
 col += getPhongFrom(lights[i]);
 }
 ;
-fcolor = vec4(col, trans);
+fcolor = vec4(texture(terrain, vec3(tiledMapEditor, 1)).xyz, 1);
 } 
 
