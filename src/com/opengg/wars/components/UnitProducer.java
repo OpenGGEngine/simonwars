@@ -75,7 +75,10 @@ public class UnitProducer extends Building{
     public void serializeUpdate(GGOutputStream out) throws IOException{
         super.serializeUpdate(out);
         out.write(progress);
-
+        out.write((byte)unitQueue.size());
+        for(var unit : unitQueue){
+            out.write((byte)unit.ordinal());
+        }
     }
 
     @Override
@@ -89,5 +92,10 @@ public class UnitProducer extends Building{
     public void deserializeUpdate(GGInputStream in, float delta) throws IOException{
         super.deserializeUpdate(in, delta);
         progress = in.readFloat();
+        unitQueue.clear();
+        var size = in.readByte();
+        for(int i = 0; i < size; i++){
+            unitQueue.add(Unit.UType.values()[in.readByte()]);
+        }
     }
 }

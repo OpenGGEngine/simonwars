@@ -30,28 +30,28 @@ public class Building extends GameObject{
         switch (type){
             case CAMP:
                 var camp = new ResourceProducer(side);
-                camp.setOutput(GameResource.WOOD, 5);
+                camp.addOutput(GameResource.WOOD, 5);
                 return camp;
             case IRONMINE:
                 var ironmine = new ResourceProducer(side);
-                ironmine.setOutput(GameResource.IRON, 5);
+                ironmine.addOutput(GameResource.IRON, 5);
                 return ironmine;
             case GOLDMINE:
                 var goldmine = new ResourceProducer(side);
-                goldmine.setOutput(GameResource.GOLD, 2);
+                goldmine.addOutput(GameResource.GOLD, 2);
                 return goldmine;
             case QUARRY:
                 var quarry = new ResourceProducer(side);
-                quarry.setOutput(GameResource.STONE, 5);
+                quarry.addOutput(GameResource.STONE, 5);
                 return quarry;
             case FARM:
                 var farm = new ResourceProducer(side);
-                farm.setOutput(GameResource.FOOD, 5);
+                farm.addOutput(GameResource.FOOD, 5);
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
                 factory.addInput(GameResource.IRON, 5);
-                factory.setOutput(GameResource.STEEL, 5);
+                factory.addOutput(GameResource.STEEL, 5);
                 factory.attach(new ModelComponent(Models.factory));
                 return factory;
             case BARRACKS:
