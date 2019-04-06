@@ -50,6 +50,7 @@ public class Empire {
             energyPerTick += amount;
         if(resource == GameResource.ENTERTAINMENT)
             entertainmentPerTick += amount;
+        return 1;
     }
 
     public int getAvailable(GameResource resource)
@@ -112,6 +113,7 @@ public class Empire {
                 return false;
             }
         }
+        return false;
     }
 
     public enum Side{
