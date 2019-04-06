@@ -6,7 +6,7 @@ import com.opengg.core.math.Vector3f;
 import com.opengg.core.render.text.Text;
 
 public class GUISetup {
-    static GUI unitGUI,builderUI,townUI;
+    static GUI unitGUI,builderUI,townUI,resourceUI;
     public static void initialize(){
         unitGUI = new GUI();
         unitGUI.addItem("background",new GUITexture(Textures.unitMenu,new Vector2f(0.8333f,0.5268f),new Vector2f(0.16666667f,0.47407f)));
@@ -15,27 +15,37 @@ public class GUISetup {
                 "Attack: 25 \n\n" + "Defense: 124").size(0.22f),Textures.dFont,new Vector2f(0.84156f,0.77167f)).setLayer(0.5f));
         GUIController.add(unitGUI,"unitGUI");
         builderUI = new GUI();
-        builderUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.166667f,1)).setLayer(-0.6f));
+        builderUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.166667f,1)).setLayer(-1f));
 
         GUIGroup fgroup = new GUIGroup(new Vector2f(0.8334f,1f));
-        GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(),Textures.button);
-        fgroup.addItem("factory",factory);
+        GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+        fgroup.addItem("factory",factory.setLayer(-0.6f));
+        fgroup.addItem("name", new GUIText(Text.from("Factory\nCoal:1000\nPSlots:1000").size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
         builderUI.addItem("fgroup",fgroup);
-        GUIGroup sgroup = new GUIGroup(new Vector2f(0.8334f,0.9056f));
-        GUIButton storage = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
-        sgroup.addItem("storage",storage);
-        builderUI.addItem("sgroup",sgroup);
-        GUIGroup cgroup = new GUIGroup(new Vector2f(0.8334f,0.8112f));
-        GUIButton coalplant = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
-        cgroup.addItem("coalp",coalplant);
+        GUIGroup mgroup = new GUIGroup(new Vector2f(0.8334f,0.9056f));
+        GUIButton mines = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+        mgroup.addItem("mines",mines.setLayer(-0.6f));
+        mgroup.addItem("name", new GUIText(Text.from("Mines\nCoal:1000\nPSlots:1000").size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
+        builderUI.addItem("mgroup",mgroup);
+        GUIGroup fagroup = new GUIGroup(new Vector2f(0.8334f,0.8112f));
+        GUIButton farms = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+        fagroup.addItem("farms",farms.setLayer(-0.6f));
+        fagroup.addItem("name", new GUIText(Text.from("Farms\nCoal:1000\nPSlots:1000").size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
+        builderUI.addItem("magroup",fagroup);
+        GUIGroup cgroup = new GUIGroup(new Vector2f(0.8334f,0.7168f));
+        GUIButton camp = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+        cgroup.addItem("camps",camp.setLayer(-0.6f));
+        cgroup.addItem("name", new GUIText(Text.from("Camps\nCoal:1000\nPSlots:1000").size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
         builderUI.addItem("cgroup",cgroup);
-        GUIGroup bgroup = new GUIGroup(new Vector2f(0.8334f,0.7168f));
+        GUIGroup bgroup = new GUIGroup(new Vector2f(0.8334f,0.6224f));
         GUIButton barracks = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
-        bgroup.addItem("barracks",barracks);
+        bgroup.addItem("barracks",barracks.setLayer(-0.6f));
+        bgroup.addItem("name", new GUIText(Text.from("Barracks\nCoal:1000\nPSlots:1000").size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
         builderUI.addItem("bgroup",bgroup);
         GUIController.add(builderUI,"builderGUI");
         initTown();
-        //GUIController.activateGUI("builderGUI");
+        initRGetterGUI();
+        GUIController.activateGUI("builderGUI");
     }
     public static void initTown(){
         townUI = new GUI();
@@ -48,7 +58,14 @@ public class GUISetup {
         worker.addItem("text",new GUIText(Text.from("Make Worker").size(0.2f),Textures.dFont,new Vector2f(0.02f,0.053f)));
         townUI.addItem("buttonGroup",worker);
         GUIController.add(townUI,"townGUI");
-        GUIController.activateGUI("townGUI");
 
+    }
+    public static void initRGetterGUI(){
+        resourceUI = new GUI();
+        resourceUI.addItem("text", new GUIText(Text.from("Type Here\n\n" + "Iron: 10/s").size(0.3f),Textures.dFont,new Vector2f(0.8433f,0.9468f)));
+        resourceUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.186667f,1)).setLayer(-0.6f));
+        resourceUI.addItem("icon",new GUITexture(Textures.foodIcon,new Vector2f(0.853f,0.568f),new Vector2f(0.122667f,0.122667f)));
+        GUIController.add(resourceUI,"resourceGUI");
+        //GUIController.activateGUI("resourceGUI");
     }
 }
