@@ -6,23 +6,36 @@ import com.opengg.core.engine.GGApplication;
 import com.opengg.core.engine.OpenGG;
 import com.opengg.core.engine.Resource;
 import com.opengg.core.io.ControlType;
+import com.opengg.core.io.input.mouse.MouseButton;
+import com.opengg.core.io.input.mouse.MouseButtonListener;
+import com.opengg.core.io.input.mouse.MouseController;
+import com.opengg.core.math.FastMath;
+import com.opengg.core.math.Vector2f;
+import com.opengg.core.math.Vector3f;
 import com.opengg.core.network.NetworkEngine;
 import com.opengg.core.render.texture.Texture;
+import com.opengg.core.render.window.WindowController;
 import com.opengg.core.render.window.WindowInfo;
 import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.FreeFlyComponent;
 import com.opengg.core.world.components.WorldObject;
+import com.opengg.wars.components.Unit;
+import com.opengg.wars.components.UserViewComponent;
+import com.opengg.wars.game.Empire;
 
-import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.opengg.core.io.input.keyboard.Key.*;
 
-public class SimonWars extends GGApplication{
+public class SimonWars extends GGApplication implements MouseButtonListener {
     public static final byte COMMAND_SEND_PACKET = 10;
 
     public static boolean[][] map = new boolean[512][512];
     public static int[][] blockers;
+
+    public static boolean offline = true;
+    private Unit unit;
 
     public static void main(String... args){
         if(args.length > 0 && args[0].equals("server")){
@@ -59,7 +72,6 @@ public class SimonWars extends GGApplication{
                     Resource.getTexturePath("skybox\\majestic_dn.png"),
                     Resource.getTexturePath("skybox\\majestic_rt.png"),
                     Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
-            WorldEngine.getCurrent().attach(new FreeFlyComponent());
             MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
             //NetworkEngine.connect("localhost", 25565);
 
@@ -77,6 +89,18 @@ public class SimonWars extends GGApplication{
             Textures.loadTextures();
             GUISetup.initialize();
 
+            var star = new AStar(512,512, new Node(500,2), new Node(500,110));
+            star.setBlocks(blockers);
+            var info = star.findPath().stream().map(n -> new Vector2f(n.getRow(), n.getCol())).collect(Collectors.toList());
+
+            unit = new Unit(Empire.Side.RED);
+            unit.setPositionOffset(new Vector3f(info.get(0).x, 0, info.get(0).y));
+            unit.setNewPath(info);
+
+            WorldEngine.getCurrent().attach(new UserViewComponent());
+
+            WorldEngine.getCurrent().attach(unit);
+            MouseController.onButtonPress(this);
         }
     }
 
@@ -93,5 +117,22 @@ public class SimonWars extends GGApplication{
             //CommandManager.sendAllCommands();
             //CommandManager.sendCommand(Command.create("yeeticus", "1"));
         }
+    }
+
+    @Override
+    public void onButtonPress(int button) {
+        if(button == MouseButton.LEFT){
+            var ray = MouseController.getRay();
+        }
+        if(button == MouseButton.RIGHT){
+            var ray = MouseController.getRay();
+            var pos = FastMath.getRayPlaneIntersection(ray.getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
+            unit.calculateAndUsePath(pos.xz());
+        }
+    }
+
+    @Override
+    public void onButtonRelease(int button) {
+
     }
 }

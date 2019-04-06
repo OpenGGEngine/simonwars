@@ -1,4 +1,4 @@
 package com.opengg.wars.components;
 
-public interface ResourceStorage {
+public class UnitBuilder {
 }

@@ -24,8 +24,7 @@ public class MapGenerator {
         var terrain = Terrain.generate(Resource.getTextureData("heightmap.png"));
 
         var terrainComp = new TerrainComponent(terrain);
-        terrainComp.setScaleOffset(new Vector3f(256,1,256));
-        terrainComp.setPositionOffset(new Vector3f(-128,0,-128));
+        terrainComp.setScaleOffset(new Vector3f(512,1,512));
         terrainComp.setBlotmap(Resource.getTexture("blend1.png"));
         terrainComp.setGroundArray(Texture.create(Texture.arrayConfig(), Resource.getTextureData("road.png"), Resource.getTextureData("road.png"), Resource.getTextureData("road.png"), Resource.getTextureData("road.png")));
 
@@ -37,8 +36,8 @@ public class MapGenerator {
                 for(int j = 0; j < 512; j++){
                     int rgb = image.getRGB(i,j);
                     int red = (rgb >> 16) & 0xff;
-                    SimonWars.map[i][j] = red != 0;
-                    if(red == 0)
+                    SimonWars.map[i][j] = red == 255;
+                    if(red != 255)
                         blockers.add(Tuple.of(i,j));
                 }
             }

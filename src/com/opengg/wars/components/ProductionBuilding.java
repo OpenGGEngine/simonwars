@@ -1,4 +1,9 @@
 package com.opengg.wars.components;
 
-public interface ProductionBuilding {
+import com.opengg.wars.game.Empire;
+
+public class ProductionBuilding extends Building{
+    public ProductionBuilding(Empire.Side side) {
+        super(side);
+    }
 }

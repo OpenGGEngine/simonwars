@@ -39,9 +39,9 @@ public class Empire {
         resources.put(GameResource.IRON, 100);
     }
 
-    public int add(GameResource resource, int amount){
+    public void add(GameResource resource, int amount){
         if(resources.containsKey(resource))
-            return resources.put(resource, resources.get(resource) + amount);
+            resources.put(resource, resources.get(resource) + amount);
         if(resource == GameResource.PEOPLESLOT)
             populationSlots += amount;
         if(resource == GameResource.PEOPLE)
@@ -112,6 +112,7 @@ public class Empire {
                 return false;
             }
         }
+        return false;
     }
 
     public enum Side{
