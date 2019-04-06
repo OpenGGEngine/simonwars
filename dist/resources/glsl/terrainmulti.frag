@@ -40,5 +40,5 @@ void main() {
 		col += getPhongFrom(lights[i]);
 	}
 
-	fcolor = vec4(col,1);
+	fcolor = vec4( texture(terrain, vec3(tiledMapEditor,1)).xyz,1);
 }
