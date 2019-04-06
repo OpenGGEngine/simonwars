@@ -1,12 +1,18 @@
 package com.opengg.wars;
 
+import com.opengg.core.engine.Resource;
 import com.opengg.core.gui.*;
+import com.opengg.core.math.Tuple;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.render.text.Text;
+import com.opengg.wars.components.ResourceProducer;
 import com.opengg.wars.components.Unit;
+import com.opengg.wars.components.UnitProducer;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
+
+import java.util.List;
 
 public class GUISetup {
     static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI;
@@ -50,7 +56,7 @@ public class GUISetup {
         initTown();
         initRGetterGUI();
         initBarracksGUI();
-        initFactoryGUI();
+        //initFactoryGUI();
         initResourceGUI();
     }
     public static void initTown(){
@@ -154,5 +160,40 @@ public class GUISetup {
         ((GUIText)unitGUI.getRoot().getItem("stats")).setText(unit.getVisibleName()+"\n\nHealth: "+unit.getHealth()+"/"+unit.getMaxhealth()+"\n\nAttack: "
         +unit.getAttack().attack+"\n\nP-Attack: " +unit.getAttack().pierceAttack+"\n\nRange: "+unit.getAttack().range
         +"\n\nDefense: "+unit.getArmor()+"\n\nP-Armor: "+unit.getPierceArmor());
+    }
+    public static GUI getFactoryGUI(ResourceProducer producer){
+        GUI newGUI = new GUI();
+        int index=0;
+        for(Tuple<List<Tuple<GameResource,Integer>>,Unit.UType> product :producer.){
+            GUIGroup group = new GUIGroup(new Vector2f(0.8334f,1f-(index*0.0944f)));
+            GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+            String resourceList="";
+            for(Tuple<GameResource,Integer> resource: product.getFirst()){
+                resourceList+=(resource.x.name()+": "+resource.y+"\n");
+            }
+            group.addItem("name", new GUIText(Text.from(product.y.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
+            group.addItem("button",factory);
+            newGUI.addItem(Integer.toString(index),group);
+            index++;
+        }
+        return newGUI;
+    }
+
+    public static GUI updateUnitProducer(UnitProducer producer){
+        GUI newGUI = new GUI();
+        int index=0;
+        for(Tuple<List<Tuple<GameResource,Integer>>,Unit.UType> product :producer.unitCreations){
+            GUIGroup group = new GUIGroup(new Vector2f(0.8334f,1f-(index*0.0944f)));
+            GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+            String resourceList="";
+            for(Tuple<GameResource,Integer> resource: product.getFirst()){
+                resourceList+=(resource.x.name()+": "+resource.y+"\n");
+            }
+            group.addItem("name", new GUIText(Text.from(product.y.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
+            group.addItem("button",factory);
+            newGUI.addItem(Integer.toString(index),group);
+            index++;
+        }
+        return newGUI;
     }
 }
