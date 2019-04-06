@@ -2,6 +2,7 @@ package com.opengg.wars.components;
 
 import com.opengg.core.GGInfo;
 import com.opengg.core.engine.Resource;
+import com.opengg.core.math.FastMath;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.util.GGInputStream;
@@ -33,6 +34,14 @@ public class Unit extends GameObject{
     public Unit(Empire.Side side) {
         super(side);
         this.attach(new ModelComponent(Resource.getModel("pear")));
+    }
+
+    public void attack(GameObject unit){
+        float distance = getPosition().distanceTo(unit.getPosition());
+        if(distance <= attack.range){
+            unit.health=Math.max(0,unit.health-Math.max(0,Math.max(attack.pierceAttack-unit.pierceArmor,1)));
+            if(FastMath.isEqual(distance,0))unit.health=Math.max(0,unit.health-Math.max(0,Math.max(attack.attack-unit.armor,1)));
+        }
     }
 
     public void update(float delta){

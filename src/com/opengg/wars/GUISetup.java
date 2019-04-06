@@ -68,11 +68,12 @@ public class GUISetup {
     }
     public static void initRGetterGUI(){
         resourceUI = new GUI();
-        resourceUI.addItem("text", new GUIText(Text.from("Type Here\n\n" + "Iron: 10/s").size(0.3f),Textures.dFont,new Vector2f(0.8433f,0.9468f)));
+        resourceUI.addItem("text", new GUIText(Text.from("Type Here\n\n" + "Iron: 10/s\n\n"+"Health: 100/100\n\nDefense: 100\n\nP-Defense: 100").size(0.2f),Textures.dFont,new Vector2f(0.8433f,0.9468f)));
         resourceUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.186667f,1)).setLayer(-0.6f));
+        resourceUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.52167f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
         resourceUI.addItem("icon",new GUITexture(Textures.foodIcon,new Vector2f(0.853f,0.568f),new Vector2f(0.122667f,0.122667f)));
         GUIController.add(resourceUI,"resourceGUI");
-        //GUIController.activateGUI("resourceGUI");
+        GUIController.activateGUI("resourceGUI");
     }
     public static void initBarracksGUI(){
         barracksUI = new GUI();
