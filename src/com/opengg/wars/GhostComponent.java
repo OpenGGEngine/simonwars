@@ -7,6 +7,7 @@ import com.opengg.core.math.FastMath;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.world.components.ModelComponent;
+import com.opengg.wars.components.Building;
 
 public class GhostComponent extends ModelComponent implements MouseButtonListener {
 
@@ -23,16 +24,14 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
     @Override
     public void onButtonPress(int button) {
         int x = (int)getPosition().x; int z = (int)getPosition().z;
-        System.out.println(getPosition());
         if(button == MouseButton.LEFT){
             for(Vector2f check:collisions){
                 int xPos = x+(int)check.x; int zPos = z+(int)check.y;
-                System.out.println("Checked:" + xPos+","+zPos);
                 if(xPos > SimonWars.map.length || xPos<0||zPos<0||zPos>SimonWars.map[0].length)return;
                 if(!SimonWars.map[xPos][zPos]) return;
             }
         }
-        System.out.println("Can Build");
+        CommandManager.sendCommand(Command.create("building_create", x+","+z, Building.BType.FACTORY.toString()));
     }
 
     @Override

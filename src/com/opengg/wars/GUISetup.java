@@ -12,7 +12,7 @@ public class GUISetup {
     static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI;
     public static void initialize(){
         unitGUI = new GUI();
-        unitGUI.addItem("background",new GUITexture(Textures.unitMenu,new Vector2f(0.8333f,0.5268f),new Vector2f(0.16666667f,0.47407f)));
+        unitGUI.addItem("background",new GUITexture(Textures.unitMenu,new Vector2f(0.8333f,0.4768f),new Vector2f(0.16666667f,0.5207f)));
         unitGUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.82167f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
 
         unitGUI.addItem("stats",new GUIText(Text.from("Enemy Here\n\n Health: 100/100 \n\n" +
@@ -152,6 +152,6 @@ public class GUISetup {
         ((GUIProgressBar)unitGUI.getRoot().getItem("health")).setPercent((float)unit.getHealth()/unit.getMaxhealth());
         ((GUIText)unitGUI.getRoot().getItem("stats")).setText(unit.getVisibleName()+"\n\nHealth: "+unit.getHealth()+"/"+unit.getMaxhealth()+"\n\nAttack: "
         +unit.getAttack().attack+"\n\nP-Attack: " +unit.getAttack().pierceAttack+"\n\nRange: "+unit.getAttack().range
-        +"\n\nDefense: "+unit.getArmor()+"\n\nP-Armor"+unit.getPierceArmor());
+        +"\n\nDefense: "+unit.getArmor()+"\n\nP-Armor: "+unit.getPierceArmor());
     }
 }
