@@ -4,6 +4,7 @@ import com.opengg.core.gui.*;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.render.text.Text;
+import com.opengg.wars.game.Empire;
 
 public class GUISetup {
     static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI;
@@ -129,5 +130,8 @@ public class GUISetup {
 
         GUIController.add(mainResourceUI,"mainResourceGUI");
         GUIController.activateGUI("mainResourceGUI");
+    }
+    public void updateResourceMenu(){
+        ((GUIText)(mainResourceUI.getRoot().getItem("ironText"))).setText(Empire.get(SimonWars.));
     }
 }
