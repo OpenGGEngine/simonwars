@@ -20,6 +20,7 @@ import com.opengg.core.render.texture.Texture;
 import com.opengg.core.render.window.WindowInfo;
 import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
+import com.opengg.core.world.components.ModelComponent;
 import com.opengg.core.world.components.WorldObject;
 import com.opengg.wars.components.GameObject;
 import com.opengg.wars.components.Unit;
@@ -58,6 +59,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     @Override
     public void setup() {
         CommandParser.initialize();
+        Empire.initialize();
         if(GGInfo.isServer()){
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 NetworkEngine.initializeServer("yeeticus", 25565);
@@ -81,6 +83,8 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
             WorldEngine.getCurrent().attach(new UserViewComponent(1));
         }else{
+            Models.init();
+
             if(offline){
                 WorldEngine.getCurrent().getRenderEnvironment().setSkybox(new Skybox(Texture.getSRGBCubemap(Resource.getTexturePath("skybox\\majestic_ft.png"),
                         Resource.getTexturePath("skybox\\majestic_bk.png"),
@@ -100,7 +104,6 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 NetworkEngine.connect("localhost", 25565);
             }
 
-
             BindController.addBind(ControlType.KEYBOARD, "forward", KEY_W);
             BindController.addBind(ControlType.KEYBOARD, "backward", KEY_S);
             BindController.addBind(ControlType.KEYBOARD, "left", KEY_A);
@@ -115,9 +118,13 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             Textures.loadTextures();
             GUISetup.initialize();
 
+            GhostComponent dragable = new GhostComponent();
+            dragable.setModel(Resource.getModel("pear"));
+            WorldEngine.getCurrent().attach(dragable);
 
-
+            WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20,600f,20)).setScaleOffset(new Vector3f(2f)));
             MouseController.onButtonPress(this);
+            MouseController.onButtonPress(dragable);
         }
     }
 
@@ -129,6 +136,11 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     @Override
     public void update(float delta) {
         CommandManager.update();
+        if(GGInfo.isServer()){
+
+        }else{
+            GUISetup.updateResourceMenu();
+        }
     }
 
     @Override

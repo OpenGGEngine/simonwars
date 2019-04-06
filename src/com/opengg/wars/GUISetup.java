@@ -4,6 +4,8 @@ import com.opengg.core.gui.*;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.render.text.Text;
+import com.opengg.wars.game.Empire;
+import com.opengg.wars.game.GameResource;
 
 public class GUISetup {
     static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI;
@@ -130,5 +132,19 @@ public class GUISetup {
 
         GUIController.add(mainResourceUI,"mainResourceGUI");
         GUIController.activateGUI("mainResourceGUI");
+    }
+    public static void updateResourceMenu(){
+        Empire e = Empire.get(SimonWars.side);
+        ((GUIText)(mainResourceUI.getRoot().getItem("ironText"))).setText(Integer.toString(e.getAvailable(GameResource.IRON)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("goldText"))).setText(Integer.toString(e.getAvailable(GameResource.GOLD)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("stoneText"))).setText(Integer.toString(e.getAvailable(GameResource.STONE)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("foodText"))).setText(Integer.toString(e.getAvailable(GameResource.FOOD)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("woodText"))).setText(Integer.toString(e.getAvailable(GameResource.WOOD)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("peopleText"))).setText(e.getAvailable(GameResource.PEOPLESLOT) + "/" +e.populationSlots+
+                " Available People: "+Integer.toString(e.getAvailable(GameResource.PEOPLE)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("steelText"))).setText(Integer.toString(e.getAvailable(GameResource.STEEL)));
+        ((GUIText)(mainResourceUI.getRoot().getItem("luxuryText"))).setText(Integer.toString(e.getAvailable(GameResource.ENTERTAINMENT))+"/s");
+        ((GUIText)(mainResourceUI.getRoot().getItem("energyText"))).setText(Integer.toString(e.getAvailable(GameResource.ENERGY))+"/s");
+
     }
 }
