@@ -1,8 +1,14 @@
 package com.opengg.wars.components;
 
 import com.opengg.core.math.Tuple;
+import com.opengg.core.util.GGInputStream;
+import com.opengg.core.util.GGOutputStream;
+import com.opengg.core.world.components.ModelComponent;
+import com.opengg.wars.Models;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
+
+import java.io.IOException;
 
 public class Building extends GameObject{
     String menuOnClick;
@@ -30,7 +36,6 @@ public class Building extends GameObject{
                 var ironmine = new ResourceProducer(side);
                 ironmine.setOutput(GameResource.IRON, 5);
                 return ironmine;
-
             case GOLDMINE:
                 var goldmine = new ResourceProducer(side);
                 goldmine.setOutput(GameResource.GOLD, 2);
@@ -45,8 +50,9 @@ public class Building extends GameObject{
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
-                factory.setInput(GameResource.IRON, 5);
+                factory.addInput(GameResource.IRON, 5);
                 factory.setOutput(GameResource.STEEL, 5);
+                factory.attach(new ModelComponent(Models.factory));
                 return factory;
             case BARRACKS:
                 var barracks = new UnitProducer();
@@ -56,5 +62,29 @@ public class Building extends GameObject{
                 return barracks;
         }
         return null;
+    }
+
+    @Override
+    public void serialize(GGOutputStream out) throws IOException {
+        super.serialize(out);
+        out.write(complete);
+        out.write(menuOnClick);
+    }
+
+    @Override
+    public void serializeUpdate(GGOutputStream out) throws IOException{
+        super.serializeUpdate(out);
+    }
+
+    @Override
+    public void deserialize(GGInputStream in) throws IOException {
+        super.deserialize(in);
+        complete = in.readBoolean();
+        menuOnClick = in.readString();
+    }
+
+    @Override
+    public void deserializeUpdate(GGInputStream in, float delta) throws IOException{
+        super.deserializeUpdate(in, delta);
     }
 }

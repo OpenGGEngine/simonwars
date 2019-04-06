@@ -40,6 +40,10 @@ public class Unit extends GameObject{
         this.attach(new ModelComponent(Resource.getModel("pear")));
     }
 
+    public static Unit spawn(UType type, Empire.Side side){
+        return null;
+    }
+
     public void attack(GameObject unit){
         float distance = getPosition().distanceTo(unit.getPosition());
         if(distance <= attack.range){

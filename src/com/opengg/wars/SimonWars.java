@@ -21,6 +21,7 @@ import com.opengg.core.world.components.ModelComponent;
 import com.opengg.core.world.components.WorldObject;
 import com.opengg.wars.components.GameObject;
 import com.opengg.wars.components.Unit;
+import com.opengg.wars.components.UnitProducer;
 import com.opengg.wars.components.UserViewComponent;
 import com.opengg.wars.game.Empire;
 
@@ -178,6 +179,9 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                     if(selected.get(0) instanceof Unit){
                         var unit = (Unit) selected.get(0);
                         CommandManager.sendCommand(Command.create("unit_move", Integer.toString(unit.getId()), pos.x + "," + pos.z));
+                    }else if(selected.get(0) instanceof UnitProducer){
+                        var prod = (UnitProducer) selected.get(0);
+                        CommandManager.sendCommand(Command.create("dropoff_set", Integer.toString(prod.getId()), pos.x + "," + pos.z));
                     }
                 }
             }
