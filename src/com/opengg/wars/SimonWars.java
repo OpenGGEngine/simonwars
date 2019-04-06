@@ -6,8 +6,6 @@ import com.opengg.core.engine.GGApplication;
 import com.opengg.core.engine.OpenGG;
 import com.opengg.core.engine.Resource;
 import com.opengg.core.gui.GUIController;
-import com.opengg.core.gui.GUIProgressBar;
-import com.opengg.core.gui.GUIText;
 import com.opengg.core.io.ControlType;
 import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
@@ -15,7 +13,6 @@ import com.opengg.core.io.input.mouse.MouseController;
 import com.opengg.core.math.FastMath;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.network.NetworkEngine;
-import com.opengg.core.render.text.Text;
 import com.opengg.core.render.texture.Texture;
 import com.opengg.core.render.window.WindowInfo;
 import com.opengg.core.world.Skybox;
@@ -39,7 +36,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static boolean[][] map = new boolean[512][512];
     public static int[][] blockers;
 
-    public static boolean offline = true;
+    public static boolean offline = false;
     public static List<GameObject> selected = new ArrayList<>();
 
     public static Empire.Side side = Empire.Side.RED;
@@ -61,6 +58,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
         CommandParser.initialize();
         Empire.initialize();
         if(GGInfo.isServer()){
+                OpenGG.setTargetUpdateTime(1/30f);
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 NetworkEngine.initializeServer("yeeticus", 25565);
                 CommandManager.initialize();
@@ -80,7 +78,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             unit.calculateAndUsePath(unit.getPosition().xz());
             WorldEngine.getCurrent().attach(unit);
 
-
+            WorldEngine.getCurrent().attach(new UserViewComponent(0));
             WorldEngine.getCurrent().attach(new UserViewComponent(1));
         }else{
             Models.init();
@@ -102,6 +100,8 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
             }else{
                 NetworkEngine.connect("localhost", 25565);
+                side = GGInfo.getUserId() == 0 ? Empire.Side.RED : Empire.Side.BLUE;
+                System.out.println(side);
             }
 
             BindController.addBind(ControlType.KEYBOARD, "forward", KEY_W);

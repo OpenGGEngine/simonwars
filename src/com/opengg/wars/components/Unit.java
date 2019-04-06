@@ -26,6 +26,10 @@ public class Unit extends GameObject{
 
     List<Vector2f> path;
 
+    public enum UType{
+        VILLAGER, WORKER, CAVALRY, INFANTRY, ARCHER
+    }
+
     public Unit(){
 
     }
@@ -61,6 +65,7 @@ public class Unit extends GameObject{
     }
 
     public void setNewPath(List<Vector2f> path){
+        if(path.isEmpty()) return;
         nextNode = path.get(0);
         this.path = path;
     }

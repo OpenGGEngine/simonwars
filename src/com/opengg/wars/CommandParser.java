@@ -12,6 +12,8 @@ public class CommandParser {
     public static void parseUnitMove(Command unit){
         var unitId = Integer.parseInt(unit.args.get(0));
         var unitComp = (Unit)WorldEngine.getCurrent().find(unitId);
-        unitComp.calculateAndUsePath(Vector2f.parseVector2f(unit.args.get(1)));
+        var newLoc = Vector2f.parseVector2f(unit.args.get(1));
+        if(SimonWars.map[(int) newLoc.x] [(int) newLoc.y])
+            unitComp.calculateAndUsePath(newLoc);
     }
 }
