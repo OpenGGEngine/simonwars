@@ -15,8 +15,8 @@ public class UserViewComponent extends ControlledComponent implements Actionable
     private Vector3fm control = new Vector3fm();
     private Vector3f vel = new Vector3f();
 
-    private float speed = 25;
-    private float accel = 10;
+    private float speed = 35;
+    private float accel = 15;
 
     public UserViewComponent(){
         this.attach(new CameraComponent());

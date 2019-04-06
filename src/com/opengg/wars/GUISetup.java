@@ -4,6 +4,7 @@ import com.opengg.core.gui.*;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.render.text.Text;
+import com.opengg.wars.components.Unit;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
 
@@ -146,5 +147,11 @@ public class GUISetup {
         ((GUIText)(mainResourceUI.getRoot().getItem("luxuryText"))).setText(Integer.toString(e.getAvailable(GameResource.ENTERTAINMENT))+"/s");
         ((GUIText)(mainResourceUI.getRoot().getItem("energyText"))).setText(Integer.toString(e.getAvailable(GameResource.ENERGY))+"/s");
 
+    }
+    public static void updateUnitMenu(Unit unit){
+        ((GUIProgressBar)unitGUI.getRoot().getItem("health")).setPercent((float)unit.getHealth()/unit.getMaxhealth());
+        ((GUIText)unitGUI.getRoot().getItem("stats")).setText(unit.getVisibleName()+"\n\nHealth: "+unit.getHealth()+"/"+unit.getMaxhealth()+"\n\nAttack: "
+        +unit.getAttack().attack+"\n\nP-Attack: " +unit.getAttack().pierceAttack+"\n\nRange: "+unit.getAttack().range
+        +"\n\nDefense: "+unit.getArmor()+"\n\nP-Armor"+unit.getPierceArmor());
     }
 }

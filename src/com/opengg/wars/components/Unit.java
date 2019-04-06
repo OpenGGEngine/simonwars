@@ -22,7 +22,7 @@ public class Unit extends GameObject{
 
     float speed = 8f;
 
-    List<Attack> attacks;
+    Attack attack = new Attack();
 
     Vector2f target;
     Vector2f nextNode;
@@ -79,4 +79,5 @@ public class Unit extends GameObject{
     public float getSpeed() {
         return speed;
     }
+    public Attack getAttack(){return attack;}
 }

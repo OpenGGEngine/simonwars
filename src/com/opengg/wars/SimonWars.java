@@ -111,7 +111,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
             WorldEngine.getCurrent().attach(new UserViewComponent());
             GhostComponent dragable = new GhostComponent();
-            dragable.setModel(Resource.getModel("pear"));
+            dragable.setModel(Resource.getModel("TheFactory"));
             WorldEngine.getCurrent().attach(dragable);
 
             WorldEngine.getCurrent().attach(unit);
@@ -159,13 +159,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                     if(allfound.get(0) instanceof Unit){
                         var unit = (Unit) allfound.get(0);
                         GUIController.activateGUI("unitGUI");
-                        var gui = GUIController.get("unitGUI");
-                        ((GUIProgressBar)gui.getRoot().getItem("health")).setPercent((float)unit.getHealth()/unit.getMaxhealth());
-                        ((GUIText)gui.getRoot().getItem("stats")).setText(Text.from(
-                                unit.getVisibleName() + "\n" +
-                                "Health: " + unit.getHealth() + "/" + unit.getMaxhealth()  + "\n\n" +
-                                "Armor: " + unit.getArmor() + ", Pierce Armor: " + unit.getPierceArmor()
-                                ));
+                        GUISetup.updateUnitMenu(unit);
                     }
                 }
             }

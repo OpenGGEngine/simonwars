@@ -4,8 +4,8 @@ public class Attack {
     String name;
     String intname;
 
-    int range;
+    public int range;
 
-    int attack;
-    int pierceAttack;
+    public int attack;
+    public int pierceAttack;
 }
