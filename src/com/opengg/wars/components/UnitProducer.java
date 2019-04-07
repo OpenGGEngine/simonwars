@@ -46,16 +46,19 @@ public class UnitProducer extends Building{
         var data = unitCreations.stream().filter(c -> c.y == type).findFirst().get();
         var canMake = data.x.stream()
                 .allMatch(p -> Empire.get(this.side).getAvailable(p.x) > p.y);
-        if(canMake)
-            data.x.forEach(p -> Empire.get(this.side).use(p.x,p.y));
+        canMake = canMake && Empire.get(this.side).getAvailable(GameResource.PEOPLE) > 0;
+        if(canMake) {
+            data.x.forEach(p -> Empire.get(this.side).use(p.x, p.y));
+            Empire.get(this.side).use(GameResource.PEOPLE,1);
             unitQueue.add(type);
+        }
     }
 
     @Override
     public void update(float delta)  {
         if(GGInfo.isServer() || SimonWars.offline) {
             if(!unitQueue.isEmpty()){
-                progress += delta * 30;
+                progress += delta * 10;
                 if(progress > 100){
                     progress = 0;
                     var unitType = unitQueue.get(0);

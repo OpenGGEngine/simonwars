@@ -60,41 +60,6 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
                 SimonWars.map[x][z] = false;
                 this.setPositionOffset(new Vector3f(1000,0,1000));
                 this.setEnabled(false);
-                switch (type){
-                    case FACTORY:
-                        Empire.get(SimonWars.side).use(GameResource.IRON,150);
-                        Empire.get(SimonWars.side).use(GameResource.WOOD,80);
-                        break;
-                    case GOLDMINE:
-                        Empire.get(SimonWars.side).use(GameResource.IRON,40);
-                        Empire.get(SimonWars.side).use(GameResource.STONE,100);
-                        break;
-                    case QUARRY:
-                        Empire.get(SimonWars.side).use(GameResource.WOOD,40);
-                        Empire.get(SimonWars.side).use(GameResource.IRON,10);
-                        break;
-                    case TOWN:
-                        Empire.get(SimonWars.side).use(GameResource.ENTERTAINMENT,40);
-                        Empire.get(SimonWars.side).use(GameResource.WOOD,150);
-                        break;
-                    case IRONMINE:
-                        Empire.get(SimonWars.side).use(GameResource.WOOD,70);
-                        Empire.get(SimonWars.side).use(GameResource.STONE,100);
-                        break;
-                    case CAMP:
-                        Empire.get(SimonWars.side).use(GameResource.FOOD,40);
-                        Empire.get(SimonWars.side).use(GameResource.WOOD,20);
-                        break;
-                    case BARRACKS:
-                        Empire.get(SimonWars.side).use(GameResource.IRON,40);
-                        Empire.get(SimonWars.side).use(GameResource.FOOD,60);
-                        break;
-                    case FARM:
-                        Empire.get(SimonWars.side).use(GameResource.IRON,30);
-                        Empire.get(SimonWars.side).use(GameResource.WOOD,30);
-                        break;
-
-                }
             }
         }
     }

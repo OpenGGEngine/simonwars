@@ -7,6 +7,7 @@ import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.ResourceUser;
 import com.opengg.wars.components.*;
 import com.opengg.wars.game.Empire;
+import com.opengg.wars.game.GameResource;
 
 public class CommandParser {
     public static void initialize(){
@@ -21,6 +22,7 @@ public class CommandParser {
     public static void parseUnitMove(Command unit){
         var unitId = Integer.parseInt(unit.args.get(0));
         var unitComp = (Unit)WorldEngine.getCurrent().find(unitId);
+        if(unitComp == null) return;
         var newLoc = Vector2f.parseVector2f(unit.args.get(1));
         unitComp.target = null;
         if(SimonWars.map[FastMath.clamp((int) newLoc.x,0,SimonWars.map[0].length-1)] [FastMath.clamp((int) newLoc.y,0,SimonWars.map.length-1)]);
@@ -45,10 +47,45 @@ public class CommandParser {
 
     public static void parseBuildingCreate(Command buildingC){
         var building = Building.BType.valueOf(buildingC.args.get(0));
-        var type = Empire.Side.valueOf(buildingC.args.get(2));
+        var side = Empire.Side.valueOf(buildingC.args.get(2));
         var loc = Vector2f.parseVector2f(buildingC.args.get(1));
 
-        var buildingComp = Building.create(building, type);
+        var buildingComp = Building.create(building, side);
+        switch (building){
+            case FACTORY:
+                Empire.get(side).use(GameResource.IRON,150);
+                Empire.get(side).use(GameResource.WOOD,80);
+                break;
+            case GOLDMINE:
+                Empire.get(side).use(GameResource.IRON,40);
+                Empire.get(side).use(GameResource.STONE,100);
+                break;
+            case QUARRY:
+                Empire.get(side).use(GameResource.WOOD,40);
+                Empire.get(side).use(GameResource.IRON,10);
+                break;
+            case TOWN:
+                Empire.get(side).use(GameResource.ENTERTAINMENT,40);
+                Empire.get(side).use(GameResource.WOOD,150);
+                break;
+            case IRONMINE:
+                Empire.get(side).use(GameResource.WOOD,70);
+                Empire.get(side).use(GameResource.STONE,100);
+                break;
+            case CAMP:
+                Empire.get(side).use(GameResource.FOOD,40);
+                Empire.get(side).use(GameResource.WOOD,20);
+                break;
+            case BARRACKS:
+                Empire.get(side).use(GameResource.IRON,40);
+                Empire.get(side).use(GameResource.FOOD,60);
+                break;
+            case FARM:
+                Empire.get(side).use(GameResource.IRON,30);
+                Empire.get(side).use(GameResource.WOOD,30);
+                break;
+
+        }
         buildingComp.setPositionOffset(new Vector3f(loc.x, 0, loc.y));
         WorldEngine.getCurrent().attach(buildingComp);
     }

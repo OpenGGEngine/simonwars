@@ -31,12 +31,12 @@ public class Empire {
     }
 
     public Empire(){
-        resources.put(GameResource.FOOD, 100);
-        resources.put(GameResource.GOLD, 50);
-        resources.put(GameResource.WOOD, 150);
+        resources.put(GameResource.FOOD, 120);
+        resources.put(GameResource.GOLD, 120);
+        resources.put(GameResource.WOOD, 120);
         resources.put(GameResource.STEEL, 0);
-        resources.put(GameResource.STONE, 100);
-        resources.put(GameResource.IRON, 100);
+        resources.put(GameResource.STONE, 70);
+        resources.put(GameResource.IRON, 70);
         resources.put(GameResource.PEOPLE, 2);
         resources.put(GameResource.PEOPLESLOT, 2);
 
