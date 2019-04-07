@@ -8,17 +8,18 @@ import com.opengg.core.engine.Resource;
 import com.opengg.core.gui.GUI;
 import com.opengg.core.gui.GUIController;
 import com.opengg.core.gui.GUIProgressBar;
+import com.opengg.core.gui.GUITexture;
 import com.opengg.core.io.ControlType;
 import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
 import com.opengg.core.io.input.mouse.MouseController;
-import com.opengg.core.math.FastMath;
-import com.opengg.core.math.Tuple;
-import com.opengg.core.math.Vector2i;
-import com.opengg.core.math.Vector3f;
+import com.opengg.core.math.*;
+import com.opengg.core.math.geom.Ray;
 import com.opengg.core.network.NetworkEngine;
 import com.opengg.core.network.Packet;
 import com.opengg.core.render.texture.Texture;
+import com.opengg.core.render.window.Window;
+import com.opengg.core.render.window.WindowController;
 import com.opengg.core.render.window.WindowInfo;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.opengg.core.io.input.keyboard.Key.*;
+import static com.opengg.core.math.FastMath.PI;
 
 public class SimonWars extends GGApplication implements MouseButtonListener {
     public static final byte COMMAND_SEND_PACKET = 10;
@@ -46,7 +48,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static int[][] blockers;
     public static List<Tuple<Vector2i, Deposit>> deposits = new ArrayList<>();
 
-    public static boolean offline = false;
+    public static boolean offline = true;
     public static List<GameObject> selected = new ArrayList<>();
     public static GUI currentSelection;
 
@@ -54,6 +56,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static GhostComponent dragable;
 
     public static float empireTimer = 0;
+    private Vector2f screenPos1;
 
     public static void main(String... args){
         if(args.length > 0 && args[0].equals("server")){
@@ -115,16 +118,21 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
-                var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
-                unit.setPositionOffset(new Vector3f(5, 0, 5));
+                var unit = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
+                unit.setPositionOffset(new Vector3f(180, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);
 
-
-                var unit2 = Unit.spawn(Unit.UType.WORKER, Empire.Side.BLUE);
-                unit2.setPositionOffset(new Vector3f(180, 0, 20));
+                var unit2 = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
+                unit2.setPositionOffset(new Vector3f(180, 0, 10));
                 unit2.calculateAndUsePath(unit2.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit2);
+
+
+                var unit3 = Unit.spawn(Unit.UType.INFANTRY, Empire.Side.BLUE);
+                unit3.setPositionOffset(new Vector3f(180, 0, 20));
+                unit3.calculateAndUsePath(unit3.getPosition().xz());
+                WorldEngine.getCurrent().attach(unit3);
             }else{
                 MapGenerator.generateFromMaps();
                 NetworkEngine.connect("10.56.90.42", 25565);
@@ -235,6 +243,26 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                     GUISetup.updateUnitMenu((Unit)SimonWars.selected.get(0));
                 }
             }
+
+            if(screenPos1 != null){
+                GUIController.activateGUI("borderGUI");
+                var gui = GUIController.get("borderGUI");
+                var img = (GUITexture)gui.getRoot().getItem("border");
+
+                var pos2 = MouseController.get().divide(new Vector2f(WindowController.getWidth(), WindowController.getHeight()));
+
+                var lowX = screenPos1.x < pos2.x ? screenPos1.x : pos2.x;
+                var lowY = 1-screenPos1.y < 1-pos2.y ? 1-screenPos1.y : 1-pos2.y;
+
+                var highX = screenPos1.x >= pos2.x ? screenPos1.x : pos2.x;
+                var highY = 1-screenPos1.y >= 1-pos2.y ? 1-screenPos1.y : 1-pos2.y;
+
+
+                img.setPositionOffset(new Vector2f(lowX, lowY));
+                img.setSize(new Vector2f(highX, highY).subtract(new Vector2f(lowX, lowY)));
+            }else{
+                GUIController.deactivateGUI("borderGUI");
+            }
             GUISetup.updateResourceMenu();
         }
     }
@@ -258,30 +286,29 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 GUIController.deactivateGUI(currentSelection.getName());
             }
 
-            if (!allfound.isEmpty()) {
-
+                if (!allfound.isEmpty()) {
                     selected.addAll(allfound);
-                    if(allfound.size() == 1){
-                        if(allfound.get(0) instanceof Villager){
+                    if (allfound.size() == 1) {
+                        if (allfound.get(0) instanceof Villager) {
                             var unit = (Villager) allfound.get(0);
                             GUIController.activateGUI("builderGUI");
                             currentSelection = GUIController.get("builderGUI");
-                        }else if(allfound.get(0) instanceof Unit){
+                        } else if (allfound.get(0) instanceof Unit) {
                             var unit = (Unit) allfound.get(0);
                             GUIController.activateGUI("unitGUI");
                             currentSelection = GUIController.get("unitGUI");
                             GUISetup.updateUnitMenu(unit);
-                        }else if(allfound.get(0) instanceof UnitProducer){
+                        } else if (allfound.get(0) instanceof UnitProducer) {
                             currentSelection = GUISetup.updateUnitProducer((UnitProducer) allfound.get(0));
                             GUIController.addAndUse(currentSelection, "unitProd");
-                        }else if(allfound.get(0) instanceof ResourceProducer){
+                        } else if (allfound.get(0) instanceof ResourceProducer) {
                             currentSelection = GUISetup.getFactoryGUI((ResourceProducer) allfound.get(0));
                             GUIController.addAndUse(currentSelection, "producer");
                         }
                     }
-
-
-            }
+                } else {
+                    screenPos1 = MouseController.get().divide(new Vector2f(WindowController.getWidth(), WindowController.getHeight()));
+                }
             });
         }
 
@@ -312,6 +339,32 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         var prod = (UnitProducer) selected.get(0);
                         CommandManager.sendCommand(Command.create("dropoff_set", Integer.toString(prod.getId()), pos.x + "," + pos.z));
                     }
+                }else{
+                    var allUnits = selected.stream().filter(c -> c instanceof Unit).map(c -> (Unit)c).collect(Collectors.toList());
+
+                    var allfound = WorldEngine.getCurrent()
+                            .getAllDescendants()
+                            .stream()
+                            .filter(c -> c instanceof GameObject)
+                            .map(c -> (GameObject)c)
+                            .filter(c -> c.getSide() != side)
+                            .filter(c -> FastMath.closestPointTo(ray.getPos(), ray.getPos().add(ray.getDir()), c.getPosition(), false).distanceTo(c.getPosition()) < c.getColliderWidth())
+                            .collect(Collectors.toList());
+
+                    if(!allfound.isEmpty()){
+                        for(var unit : allUnits){
+                            CommandManager.sendCommand(Command.create("unit_attack", Integer.toString(unit.getId()), Integer.toString(allfound.get(0).getId())));
+                        }
+                    }else{
+                        for(var unit : allUnits){
+                            float a = (float) (Math.random() * 2 * PI);
+                            float r = (float) (allUnits.size()/2 * Math.sqrt(Math.random()));
+                            float x = r * FastMath.cos(a);
+                            float y = r *  FastMath.sin(a);
+                            var newPos = pos.add(new Vector3f(x,0,y));
+                            CommandManager.sendCommand(Command.create("unit_move", Integer.toString(unit.getId()), newPos.x + "," + newPos.z));
+                        }
+                    }
                 }
             }
         }
@@ -319,6 +372,40 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     @Override
     public void onButtonRelease(int button) {
+        if(button == MouseButton.LEFT){
+            if(screenPos1 != null){
+                var pos1 = screenPos1.multiply(new Vector2f(WindowController.getWidth(), WindowController.getHeight()));
+                var pos2 = MouseController.get();
 
+                var lowX = pos1.x < pos2.x ? pos1.x : pos2.x;
+                var lowY = pos1.y < pos2.y ? pos1.y : pos2.y;
+
+                var highX = pos1.x >= pos2.x ? pos1.x : pos2.x;
+                var highY = pos1.y >= pos2.y ? pos1.y : pos2.y;
+
+                var intersection1 = FastMath.getRayPlaneIntersection(MouseController.getRay(lowX, lowY).getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
+                var intersection2 = FastMath.getRayPlaneIntersection(MouseController.getRay(highX, lowY).getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
+
+                var intersection3 = FastMath.getRayPlaneIntersection(MouseController.getRay(lowX, highY).getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
+                var intersection4 = FastMath.getRayPlaneIntersection(MouseController.getRay(highX, highY).getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
+
+                var allfound = WorldEngine.getCurrent()
+                        .getAllDescendants()
+                        .stream()
+                        .filter(c -> c instanceof GameObject)
+                        .map(c -> (GameObject)c)
+                        .filter(c -> c.getSide() == side)
+                        .filter(c -> FastMath.isPointInPolygon(c.getPosition().xz(), List.of(intersection1.xz(), intersection2.xz(), intersection3.xz(), intersection4.xz())))
+                        .collect(Collectors.toList());
+
+                selected.clear();
+                if(!allfound.isEmpty())
+                {
+                    selected.addAll(allfound);
+                }
+
+                screenPos1 = null;
+            }
+        }
     }
 }

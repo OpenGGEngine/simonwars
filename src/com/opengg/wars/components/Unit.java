@@ -6,6 +6,7 @@ import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
+import com.opengg.core.world.WorldEngine;
 import com.opengg.wars.AStar;
 import com.opengg.wars.Node;
 import com.opengg.wars.SimonWars;
@@ -26,6 +27,8 @@ public class Unit extends GameObject{
 
     float timeSinceLastAttack = 0;
     float timeSinceLastUpdate = 0;
+    float timeSinceLastScan = 0;
+
 
     List<Vector2f> path;
 
@@ -80,7 +83,7 @@ public class Unit extends GameObject{
                 archer.speed = 6f;
                 archer.getAttack().attack = 0;
                 archer.getAttack().pierceAttack = 5;
-                archer.getAttack().range = 6;
+                archer.getAttack().range = 9;
                 archer.getAttack().speed = 2f;
                 archer.attach(new SpriteRenderComponent(side + "/Archer.png").setRotationOffset(new Vector3f(-15,45,0)).setScaleOffset(3));
                 archer.visibleName = "Archer";
@@ -121,6 +124,7 @@ public class Unit extends GameObject{
     public void update(float delta){
         timeSinceLastAttack += delta;
         timeSinceLastUpdate += delta;
+        timeSinceLastScan += delta;
         super.update(delta);
         if(GGInfo.isServer() || SimonWars.offline){
             if(this.target != null){
@@ -148,6 +152,17 @@ public class Unit extends GameObject{
                 if(!path.isEmpty()){
                     nextNode = path.get(0);
                     path.remove(0);
+                }else{
+                    if(timeSinceLastScan > 0.5f){
+                        timeSinceLastScan = 0f;
+                        WorldEngine.getCurrent().getAllDescendants()
+                                .stream()
+                                .filter(c -> c instanceof  GameObject)
+                                .map(c -> (GameObject)c)
+                                .filter(c -> c.side != this.side)
+                                .filter(c -> c.getPosition().distanceTo(this.getPosition()) < 10f)
+                                .findFirst().ifPresent(c -> target = c);
+                    }
                 }
             }
         }
