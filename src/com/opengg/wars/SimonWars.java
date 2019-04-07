@@ -12,6 +12,8 @@ import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
 import com.opengg.core.io.input.mouse.MouseController;
 import com.opengg.core.math.FastMath;
+import com.opengg.core.math.Tuple;
+import com.opengg.core.math.Vector2i;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.network.NetworkEngine;
 import com.opengg.core.render.texture.Texture;
@@ -21,6 +23,7 @@ import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.core.world.components.WorldObject;
 import com.opengg.wars.components.*;
+import com.opengg.wars.game.Deposit;
 import com.opengg.wars.game.Empire;
 
 import java.util.ArrayList;
@@ -32,8 +35,9 @@ import static com.opengg.core.io.input.keyboard.Key.*;
 public class SimonWars extends GGApplication implements MouseButtonListener {
     public static final byte COMMAND_SEND_PACKET = 10;
 
-    public static boolean[][] map = new boolean[512][512];
+    public static boolean[][] map = new boolean[192][192];
     public static int[][] blockers;
+    public static List<Tuple<Vector2i, Deposit>> deposits = new ArrayList<>();
 
     public static boolean offline = true;
     public static List<GameObject> selected = new ArrayList<>();
@@ -78,7 +82,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
 
             var unit = new Unit(Empire.Side.RED);
-            unit.setPositionOffset(new Vector3f(500, 0, 5));
+            unit.setPositionOffset(new Vector3f(180, 0, 5));
             unit.calculateAndUsePath(unit.getPosition().xz());
             WorldEngine.getCurrent().attach(unit);
 
@@ -97,7 +101,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
                 var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
-                unit.setPositionOffset(new Vector3f(500, 0, 5));
+                unit.setPositionOffset(new Vector3f(180, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);
 
@@ -162,13 +166,13 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                     .collect(Collectors.toList());
 
             selected.clear();
-
+            OpenGG.asyncExec(() -> {
             if(currentSelection != null){
                 GUIController.deactivateGUI(currentSelection.getName());
             }
 
             if (!allfound.isEmpty()) {
-                OpenGG.asyncExec(() -> {
+
                     selected.addAll(allfound);
                     if(allfound.size() == 1){
                         if(allfound.get(0) instanceof Villager){
@@ -188,9 +192,10 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                             GUIController.addAndUse(currentSelection, "producer");
                         }
                     }
-                });
+
 
             }
+            });
         }
 
         if(button == MouseButton.RIGHT){

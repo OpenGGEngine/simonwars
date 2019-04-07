@@ -70,7 +70,7 @@ public class Empire {
 
     public boolean use(GameResource resource, int amount) {
         if(resources.containsKey(resource)){
-            if (resources.get(resource) > amount) {
+            if (resources.get(resource) >= amount) {
                 resources.put(resource, resources.get(resource) - amount);
                 return true;
             }else{

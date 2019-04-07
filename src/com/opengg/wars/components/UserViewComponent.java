@@ -30,7 +30,7 @@ public class UserViewComponent extends ControlledComponent implements Actionable
     public UserViewComponent(int user){
         this.attach(new CameraComponent().setUserId(user));
         this.attach(new ActionTransmitterComponent().setUserId(user));
-        this.setPositionOffset(new Vector3f(500,15,0));
+        this.setPositionOffset(new Vector3f(180,15,0));
         this.setRotationOffset(new Vector3f(55,-135, 0));
     }
 
@@ -45,10 +45,10 @@ public class UserViewComponent extends ControlledComponent implements Actionable
             setPositionOffset(getPositionOffset().add(vel.multiply(delta)));
             var pos = this.getPosition();
             if(pos.x <= 0) this.setPositionOffset(pos.setX(0));
-            if(pos.x >= 512) this.setPositionOffset(pos.setX(512));
+            if(pos.x >= 192) this.setPositionOffset(pos.setX(192));
 
             if(pos.z <= 0) this.setPositionOffset(pos.setZ(0));
-            if(pos.z >= 512) this.setPositionOffset(pos.setZ(512));
+            if(pos.z >= 192) this.setPositionOffset(pos.setZ(192));
 
 
     }
