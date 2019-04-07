@@ -88,7 +88,7 @@ void process(){
 
 	reflectedcolor = texture(cubemap, normalize(reflect(eyedir,n))).xyz;
 	
-	ambient = ambient * reflectedcolor;
+	ambient = ambient * 0.2f *reflectedcolor;
 }
 
 void main() {  
@@ -100,5 +100,5 @@ void main() {
 		col += shadify(lights[i]);
 	}
 
-	fcolor = vec4(col + ambient, 0.7f);
+	fcolor = vec4(col + ambient, 0.9f);
 }

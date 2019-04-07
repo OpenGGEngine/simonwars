@@ -41,4 +41,5 @@ void main() {
 	}
 
 	fcolor = vec4( texture(terrain, vec3(tiledMapEditor,1)).xyz,1);
+	//fcolor = vec4(norm,1);
 }

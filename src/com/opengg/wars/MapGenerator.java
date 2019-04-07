@@ -7,9 +7,11 @@ import com.opengg.core.math.Vector3f;
 import com.opengg.core.render.light.Light;
 import com.opengg.core.render.texture.Texture;
 import com.opengg.core.world.Terrain;
+import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.Component;
 import com.opengg.core.world.components.LightComponent;
 import com.opengg.core.world.components.TerrainComponent;
+import com.opengg.core.world.components.WaterComponent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -26,7 +28,7 @@ public class MapGenerator {
         var terrainComp = new TerrainComponent(terrain);
         terrainComp.setScaleOffset(new Vector3f(512,1,512));
         terrainComp.setBlotmap(Resource.getTexture("blend1.png"));
-        terrainComp.setGroundArray(Texture.create(Texture.arrayConfig(), Resource.getTextureData("road.png"), Resource.getTextureData("road.png"), Resource.getTextureData("road.png"), Resource.getTextureData("road.png")));
+        terrainComp.setGroundArray(Texture.create(Texture.arrayConfig(), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png")));
 
         try {
             BufferedImage image = ImageIO.read(new File(Resource.getTexturePath("pathfind.png")).toURI().toURL());
@@ -53,6 +55,9 @@ public class MapGenerator {
         var light = new LightComponent(Light.createDirectional(new Quaternionf(new Vector3f(0,0f,-50)),
                 new Vector3f(1,1,1)));
 
-        return List.of(terrainComp, light);
+        WaterComponent water = new WaterComponent(Resource.getTexture("water.jpg").getData().get(0),1000f);
+        water.setPositionOffset(new Vector3f(0,-1,0));
+        WorldEngine.getCurrent().attach(water);
+        return List.of(terrainComp.setPositionOffset(0,5,0), light,water);
     }
 }
