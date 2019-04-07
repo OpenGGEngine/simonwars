@@ -164,15 +164,21 @@ public class GUISetup {
     public static GUI getFactoryGUI(ResourceProducer producer){
         GUI newGUI = new GUI();
         int index=0;
-        for(Tuple<List<Tuple<GameResource,Integer>>,Unit.UType> product :producer.){
+        for(Tuple<List<Tuple<GameResource,Integer>>, Tuple<GameResource, Integer>> product :producer.products){
             GUIGroup group = new GUIGroup(new Vector2f(0.8334f,1f-(index*0.0944f)));
             GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
             String resourceList="";
             for(Tuple<GameResource,Integer> resource: product.getFirst()){
                 resourceList+=(resource.x.name()+": "+resource.y+"\n");
             }
-            group.addItem("name", new GUIText(Text.from(product.y.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
+            group.addItem("name", new GUIText(Text.from(product.y.x.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
             group.addItem("button",factory);
+            factory.setOnClick(()->{
+                Empire e = Empire.get(SimonWars.side);
+                for(Tuple<GameResource,Integer> resource: product.getFirst()){
+                    if(e.getAvailable(resource.x)<resource.y)return;
+                }
+            });
             newGUI.addItem(Integer.toString(index),group);
             index++;
         }
@@ -191,6 +197,12 @@ public class GUISetup {
             }
             group.addItem("name", new GUIText(Text.from(product.y.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
             group.addItem("button",factory);
+            factory.setOnClick(()->{
+                Empire e = Empire.get(SimonWars.side);
+                for(Tuple<GameResource,Integer> resource: product.getFirst()){
+                if(e.getAvailable(resource.x)<resource.y)return;
+            }
+            });
             newGUI.addItem(Integer.toString(index),group);
             index++;
         }
