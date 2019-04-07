@@ -49,6 +49,24 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
 
     public void enable(Building.BType type){
         this.type = type;
+        switch(type){
+            case FACTORY:
+                setModel(Models.factory);
+                setScaleOffset(1f);
+                break;
+            case QUARRY:
+            case IRONMINE:
+            case GOLDMINE:
+                setModel(Models.mine);
+                setRotationOffset(new Vector3f(180,90,180));
+                setScaleOffset(0.001f);
+                break;
+            case TOWN:
+                setModel(Models.house);
+                setRotationOffset(new Vector3f(0,0,90));
+                setScaleOffset(1f);
+                break;
+        }
         this.setEnabled(true);
 
     }
