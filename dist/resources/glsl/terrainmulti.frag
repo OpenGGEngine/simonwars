@@ -6,7 +6,7 @@ uniform sampler2DArray terrain;
 uniform vec3 scale;
 
 void main() {
-	vec4 blendMapColor = getTex(Ka);
+	vec4 blendMapColor = texture(Ka,vec2(textureCoord.x,1-textureCoord.y));
 	float backTextureAmount = 1 - (blendMapColor.r + blendMapColor.b +blendMapColor.g);
     vec2 tiledMapEditor = vec2(textureCoord.x * scale.x, textureCoord.y * scale.z);
 
@@ -41,5 +41,5 @@ void main() {
 	}
 
 	fcolor = vec4( texture(terrain, vec3(tiledMapEditor,1)).xyz,1);
-	//fcolor = vec4(norm,1);
+	fcolor = vec4(finalColor);
 }

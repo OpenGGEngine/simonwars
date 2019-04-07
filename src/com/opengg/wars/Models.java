@@ -11,13 +11,19 @@ public class Models {
     public static Model gold;
     public static Model iron;
     public static Model forest;
+    public static Model forestCamp;
+    public static Model farm;
+    public static Model barrack;
     public static void init(){
         factory = Resource.getModel("TheFactory");
         stone = Resource.getModel("Rock_6");
         gold = Resource.getModel("Gold");
         iron = Resource.getModel("Iron");
         house = Resource.getModel("cottage");
-        mine = Resource.getModel("DIESPOM_");
+        mine = Resource.getModel("Bull");
         forest = Resource.getModel("Tree");
+        forestCamp = Resource.getModel("Logcamp");
+        farm = Resource.getModel("tractor");
+        barrack = Resource.getModel("Barracks");
     }
 }

@@ -1,6 +1,7 @@
 package com.opengg.wars.components;
 
 import com.opengg.core.math.Tuple;
+import com.opengg.core.math.Vector3f;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
 import com.opengg.core.world.components.ModelComponent;
@@ -31,36 +32,37 @@ public class Building extends GameObject{
             case CAMP:
                 var camp = new ResourceProducer(side);
                 camp.addOutput(GameResource.WOOD, 5);
-                camp.attach(new ModelComponent(Models.factory));
+                camp.attach(new ModelComponent(Models.forestCamp).setScaleOffset(0.009f));
 
                 return camp;
             case IRONMINE:
                 var ironmine = new ResourceProducer(side);
                 ironmine.addOutput(GameResource.IRON, 5);
-                ironmine.attach(new ModelComponent(Models.mine).setScaleOffset(0.001f));
+                ironmine.attach(new ModelComponent(Models.mine).setScaleOffset(0.1f));
 
                 return ironmine;
             case GOLDMINE:
                 var goldmine = new ResourceProducer(side);
                 goldmine.addOutput(GameResource.GOLD, 2);
-                goldmine.attach(new ModelComponent(Models.mine).setScaleOffset(0.001f));
+                goldmine.attach(new ModelComponent(Models.mine).setScaleOffset(0.1f));
 
                 return goldmine;
             case QUARRY:
                 var quarry = new ResourceProducer(side);
                 quarry.addOutput(GameResource.STONE, 5);
-                quarry.attach(new ModelComponent(Models.mine).setScaleOffset(0.001f));
+                quarry.attach(new ModelComponent(Models.mine)).setScaleOffset(0.1f);
 
                 return quarry;
             case FARM:
                 var farm = new ResourceProducer(side);
                 farm.addOutput(GameResource.FOOD, 5);
-                farm.attach(new ModelComponent(Models.factory));
+                farm.attach(new ModelComponent(Models.farm).setRotationOffset(new Vector3f(0,0,-90)));
 
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
                 factory.addOutput(GameResource.STEEL, 5, Tuple.of(GameResource.IRON, 5));
+                factory.addOutput(GameResource.ENTERTAINMENT,1,Tuple.of(GameResource.GOLD,5));
                 factory.attach(new ModelComponent(Models.factory));
                 return factory;
             case BARRACKS:
@@ -68,8 +70,12 @@ public class Building extends GameObject{
                 barracks.addUnit(Unit.UType.INFANTRY, Tuple.of(GameResource.STONE, 5), Tuple.of(GameResource.FOOD, 6));
                 barracks.addUnit(Unit.UType.CAVALRY, Tuple.of(GameResource.WOOD, 8), Tuple.of(GameResource.FOOD, 12));
                 barracks.addUnit(Unit.UType.ARCHER, Tuple.of(GameResource.STONE, 9), Tuple.of(GameResource.WOOD, 9));
-                barracks.attach(new ModelComponent(Models.factory));
+                barracks.attach(new ModelComponent(Models.barrack).setScaleOffset(0.02f).setRotationOffset(new Vector3f(90,0,0)));
                 return barracks;
+            case TOWN:
+                var town = new ResourceProducer(side);
+                town.attach(new ModelComponent(Models.house).setRotationOffset(new Vector3f(270,180,180)).setScaleOffset(0.5f));
+                return town;
         }
         return null;
     }
