@@ -62,7 +62,7 @@ public class Building extends GameObject{
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
-                factory.addOutput(GameResource.STEEL, 5, Tuple.of(GameResource.IRON, 5));
+                factory.addOutput(GameResource.STEEL, 2, Tuple.of(GameResource.IRON, 5));
                 factory.addOutput(GameResource.ENTERTAINMENT,1,Tuple.of(GameResource.GOLD,5));
                 factory.addOutput(GameResource.NONE,0,Tuple.of(GameResource.NONE,0));
                 factory.attach(new ModelComponent(Models.factory));
