@@ -16,7 +16,7 @@ public class Empire {
 
     public int energyPerTick = 0;
     public int energyUsedPerTick = 0;
-    public int entertainmentPerTick = 0;
+    public int entertainmentPerTick = 800;
     public int entertainmentUsedPerTick = 0;
 
 

@@ -54,6 +54,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     public static Empire.Side side = Empire.Side.RED;
     public static GhostComponent dragable;
+    public static float pressTimer = 0;
 
     public static float empireTimer = 0;
     private Vector2f screenPos1;
@@ -118,7 +119,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
-                var unit = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
+                var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
                 unit.setPositionOffset(new Vector3f(180, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);
@@ -245,6 +246,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             }
 
             if(screenPos1 != null){
+                pressTimer += delta;
                 GUIController.activateGUI("borderGUI");
                 var gui = GUIController.get("borderGUI");
                 var img = (GUITexture)gui.getRoot().getItem("border");
@@ -373,7 +375,8 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     @Override
     public void onButtonRelease(int button) {
         if(button == MouseButton.LEFT){
-            if(screenPos1 != null){
+            if(screenPos1 != null && pressTimer > 0.2f){
+
                 var pos1 = screenPos1.multiply(new Vector2f(WindowController.getWidth(), WindowController.getHeight()));
                 var pos2 = MouseController.get();
 
@@ -404,8 +407,10 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                     selected.addAll(allfound);
                 }
 
-                screenPos1 = null;
             }
+            pressTimer = 0;
+            screenPos1 = null;
+
         }
     }
 }
