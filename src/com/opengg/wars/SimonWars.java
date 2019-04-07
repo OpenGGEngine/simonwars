@@ -48,7 +48,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static int[][] blockers;
     public static List<Tuple<Vector2i, Deposit>> deposits = new ArrayList<>();
 
-    public static boolean offline = false;
+    public static boolean offline = true;
     public static List<GameObject> selected = new ArrayList<>();
     public static GUI currentSelection;
 
@@ -99,11 +99,41 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             unit.calculateAndUsePath(unit.getPosition().xz());
             WorldEngine.getCurrent().attach(unit);
 
+            var a = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
+            a.setPositionOffset(new Vector3f(180, 0, 15));
+            a.calculateAndUsePath(a.getPosition().xz());
+            WorldEngine.getCurrent().attach(a);
+
+            var cav = Unit.spawn(Unit.UType.CAVALRY, Empire.Side.RED);
+            cav.setPositionOffset(new Vector3f(180, 0, 20));
+            cav.calculateAndUsePath(cav.getPosition().xz());
+            WorldEngine.getCurrent().attach(cav);
+
+            var inf = Unit.spawn(Unit.UType.INFANTRY, Empire.Side.RED);
+            inf.setPositionOffset(new Vector3f(180, 0, 10));
+            inf.calculateAndUsePath(inf.getPosition().xz());
+            WorldEngine.getCurrent().attach(inf);
+
 
             var unit2 = Unit.spawn(Unit.UType.WORKER, Empire.Side.BLUE);
             unit2.setPositionOffset(new Vector3f(5, 0, 170));
             unit2.calculateAndUsePath(unit2.getPosition().xz());
             WorldEngine.getCurrent().attach(unit2);
+
+            var a2 = Unit.spawn(Unit.UType.ARCHER, Empire.Side.BLUE);
+            a2.setPositionOffset(new Vector3f(10, 0, 170));
+            a2.calculateAndUsePath(a2.getPosition().xz());
+            WorldEngine.getCurrent().attach(a2);
+
+            var cav2 = Unit.spawn(Unit.UType.CAVALRY, Empire.Side.BLUE);
+            cav2.setPositionOffset(new Vector3f(15, 0, 170));
+            cav2.calculateAndUsePath(cav2.getPosition().xz());
+            WorldEngine.getCurrent().attach(cav2);
+
+            var inf2 = Unit.spawn(Unit.UType.INFANTRY, Empire.Side.BLUE);
+            inf2.setPositionOffset(new Vector3f(20, 0, 170));
+            inf2.calculateAndUsePath(inf2.getPosition().xz());
+            WorldEngine.getCurrent().attach(inf2);
 
             WorldEngine.getCurrent().attach(new UserViewComponent(0));
             WorldEngine.getCurrent().attach(new UserViewComponent(1).setPositionOffset(5,15,170).setRotationOffset(new Vector3f(53,45, 0)));
@@ -162,7 +192,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             dragable.setEnabled(false);
             WorldEngine.getCurrent().attach(dragable);
 
-            WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20,600f,20)).setScaleOffset(new Vector3f(2f)));
+            WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20, 600f, 20)).setScaleOffset(new Vector3f(2f)));
             MouseController.onButtonPress(this);
             MouseController.onButtonPress(dragable);
         }
@@ -228,6 +258,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     @Override
     public void update(float delta) {
+
         CommandManager.update();
         if(GGInfo.isServer()){
             empireTimer++;
