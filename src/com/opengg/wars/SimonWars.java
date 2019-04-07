@@ -115,7 +115,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
-                var unit = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
+                var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
                 unit.setPositionOffset(new Vector3f(180, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);

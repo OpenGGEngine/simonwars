@@ -46,13 +46,11 @@ public class CommandParser {
     public static void parseBuildingCreate(Command buildingC){
         var building = Building.BType.valueOf(buildingC.args.get(0));
         var type = Empire.Side.valueOf(buildingC.args.get(2));
-        System.out.println(type);
         var loc = Vector2f.parseVector2f(buildingC.args.get(1));
 
         var buildingComp = Building.create(building, type);
         buildingComp.setPositionOffset(new Vector3f(loc.x, 0, loc.y));
         WorldEngine.getCurrent().attach(buildingComp);
-        System.out.println(buildingComp.getSide());
     }
 
     public static void parseUnitOrder(Command order){
