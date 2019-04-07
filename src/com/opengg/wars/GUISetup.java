@@ -243,7 +243,7 @@ public class GUISetup {
                 for (Tuple<GameResource, Integer> resource : product.getFirst()) {
                     if (e.getAvailable(resource.x) < resource.y) return;
                 }
-                producer.selected = temp;
+                CommandManager.sendCommand(Command.create("factory_set", String.valueOf(producer.getId()), String.valueOf(temp)));
             });
             newGUI.addItem(Integer.toString(index), group);
             index++;

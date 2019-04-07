@@ -4,10 +4,8 @@ import com.opengg.core.math.FastMath;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.world.WorldEngine;
-import com.opengg.wars.components.Building;
-import com.opengg.wars.components.GameObject;
-import com.opengg.wars.components.Unit;
-import com.opengg.wars.components.UnitProducer;
+import com.opengg.core.world.components.ResourceUser;
+import com.opengg.wars.components.*;
 import com.opengg.wars.game.Empire;
 
 public class CommandParser {
@@ -17,6 +15,7 @@ public class CommandParser {
         CommandManager.registerCommandUser("building_create", CommandParser::parseBuildingCreate);
         CommandManager.registerCommandUser("unit_order", CommandParser::parseUnitOrder);
         CommandManager.registerCommandUser("unit_attack", CommandParser::parseUnitAttack);
+        CommandManager.registerCommandUser("factory_set", CommandParser::parseFactorySet);
     }
 
     public static void parseUnitMove(Command unit){
@@ -59,5 +58,11 @@ public class CommandParser {
         var unit = Unit.UType.valueOf(order.args.get(0));
 
         building.spawnUnit(unit);
+    }
+
+    public static void parseFactorySet(Command order){
+        var building = (ResourceProducer)WorldEngine.getCurrent().find(Integer.parseInt(order.args.get(0)));
+        var temp = Integer.parseInt(order.args.get(1));
+        building.selected = temp;
     }
 }

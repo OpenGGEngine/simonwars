@@ -69,6 +69,7 @@ public class ResourceProducer extends Building{
     @Override
     public void serializeUpdate(GGOutputStream out) throws IOException{
         super.serializeUpdate(out);
+        out.write(selected);
     }
 
     @Override
@@ -93,5 +94,6 @@ public class ResourceProducer extends Building{
     @Override
     public void deserializeUpdate(GGInputStream in, float delta) throws IOException{
         super.deserializeUpdate(in, delta);
+        selected = in.readInt();
     }
 }
