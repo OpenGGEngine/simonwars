@@ -10,7 +10,7 @@ public class Empire {
 
     public HashMap<GameResource, Integer> resources = new HashMap<>();
 
-    public int populationSlots = 0;
+    public int populationSlots = 2;
     public int occupiedSlots = 0;
     public int populations = 0;
 
@@ -37,6 +37,9 @@ public class Empire {
         resources.put(GameResource.STEEL, 0);
         resources.put(GameResource.STONE, 100);
         resources.put(GameResource.IRON, 100);
+        resources.put(GameResource.PEOPLE, 2);
+        resources.put(GameResource.PEOPLESLOT, 2);
+
     }
 
     public void add(GameResource resource, int amount){
@@ -55,12 +58,13 @@ public class Empire {
 
     public int getAvailable(GameResource resource)
     {
+        System.out.println(populationSlots +"," +occupiedSlots);
         if(resources.containsKey(resource))
             return resources.get(resource);
         if(resource == GameResource.PEOPLE)
             return Math.max(populations - occupiedSlots, 0);
-        if(resource == GameResource.PEOPLESLOT)
-            return Math.max(populationSlots - occupiedSlots, 0);
+        if(resource == GameResource.PEOPLESLOT){
+            return Math.max(populationSlots - occupiedSlots, 0);}
         if(resource == GameResource.ENTERTAINMENT)
             return entertainmentPerTick - entertainmentUsedPerTick;
         if(resource == GameResource.ENERGY)
