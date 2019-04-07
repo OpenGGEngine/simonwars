@@ -50,8 +50,8 @@ public class Unit extends GameObject{
         switch (type) {
             case INFANTRY:
                 Unit infantry = new Unit(side);
-                infantry.health = 10;
-                infantry.maxhealth = 10;
+                infantry.health = 20;
+                infantry.maxhealth = 20;
                 infantry.armor = 2;
                 infantry.pierceArmor = 3;
                 infantry.speed = 5f;

@@ -23,17 +23,17 @@ public class Town extends Building {
     }
     public void update(float delta){
         if(GGInfo.isServer() || SimonWars.offline){
-            regenRate = (Empire.get(SimonWars.side).getAvailable(GameResource.FOOD)<1)? 600:300;
+            regenRate = (Empire.get(side).getAvailable(GameResource.FOOD)<1)? 600:300;
             super.update(delta);
             if(counter % regenRate == 0){
-                if( Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE) <Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT) ){
-                    Empire.get(SimonWars.side).add(GameResource.PEOPLE,1);
-                }else if(Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE) > Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)){
-                    Empire.get(SimonWars.side).use(GameResource.PEOPLE,Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE) - (Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)));
+                if( Empire.get(this.side).populations < Empire.get(this.side).populationSlots ){
+                    Empire.get(side).add(GameResource.PEOPLE,1);
+                }else if(Empire.get(side).getAvailable(GameResource.PEOPLE) > Empire.get(side).getAvailable(GameResource.PEOPLESLOT)){
+                    Empire.get(side).use(GameResource.PEOPLE,Empire.get(side).getAvailable(GameResource.PEOPLE) - (Empire.get(side).getAvailable(GameResource.PEOPLESLOT)));
                 }
             }
             if(counter % 60 == 0){
-                Empire.get(SimonWars.side).use(GameResource.FOOD,5*(Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)));
+                Empire.get(side).use(GameResource.FOOD,5*(Empire.get(side).getAvailable(GameResource.PEOPLESLOT)));
             }
             counter+=1;
         }

@@ -48,7 +48,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static int[][] blockers;
     public static List<Tuple<Vector2i, Deposit>> deposits = new ArrayList<>();
 
-    public static boolean offline = false;
+    public static boolean offline = true;
     public static List<GameObject> selected = new ArrayList<>();
     public static GUI currentSelection;
 
@@ -106,7 +106,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             WorldEngine.getCurrent().attach(unit2);
 
             WorldEngine.getCurrent().attach(new UserViewComponent(0));
-            WorldEngine.getCurrent().attach(new UserViewComponent(1).setPositionOffset(5,15,170));
+            WorldEngine.getCurrent().attach(new UserViewComponent(1).setPositionOffset(5,15,170).setRotationOffset(new Vector3f(53,45, 0)));
         }else{
 
             if(offline){

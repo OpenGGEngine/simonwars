@@ -46,10 +46,10 @@ public class UnitProducer extends Building{
         var data = unitCreations.stream().filter(c -> c.y == type).findFirst().get();
         var canMake = data.x.stream()
                 .allMatch(p -> Empire.get(this.side).getAvailable(p.x) > p.y);
-        canMake = canMake && Empire.get(this.side).getAvailable(GameResource.PEOPLE) > 0;
+        canMake = canMake && Empire.get(this.side).populations - Empire.get(this.side).occupiedSlots > 0;
         if(canMake) {
             data.x.forEach(p -> Empire.get(this.side).use(p.x, p.y));
-            Empire.get(this.side).use(GameResource.PEOPLE,1);
+            Empire.get(this.side).populations--;
             unitQueue.add(type);
         }
     }

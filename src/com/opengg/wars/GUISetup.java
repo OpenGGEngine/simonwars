@@ -39,7 +39,7 @@ public class GUISetup {
         GUIGroup fgroup = new GUIGroup(new Vector2f(0.8334f,0.9056f));
         GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         factory.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 150 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 80 && 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 150 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 80 && Empire.get(SimonWars.side).populationSlots-Empire.get(SimonWars.side).occupiedSlots > 0) {
                 SimonWars.dragable.enable(Building.BType.FACTORY);
             }
         });
@@ -49,7 +49,7 @@ public class GUISetup {
         GUIGroup mgroup = new GUIGroup(new Vector2f(0.8334f,0.8112f));
         GUIButton mines = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         mines.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100 && Empire.get(SimonWars.side).populationSlots-Empire.get(SimonWars.side).occupiedSlots > 0) {
                 SimonWars.dragable.enable(Building.BType.GOLDMINE);
             }
         });
@@ -59,7 +59,7 @@ public class GUISetup {
         GUIGroup fagroup = new GUIGroup(new Vector2f(0.8334f,0.7168f));
         GUIButton farms = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         farms.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 30 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 30&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 30 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 30 && Empire.get(SimonWars.side).populationSlots-Empire.get(SimonWars.side).occupiedSlots > 0) {
                 SimonWars.dragable.enable(Building.BType.FARM);
             }
         });
@@ -69,7 +69,7 @@ public class GUISetup {
         GUIGroup cgroup = new GUIGroup(new Vector2f(0.8334f,0.6224f));
         GUIButton camp = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         camp.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 20&& 0< Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 20  && Empire.get(SimonWars.side).populationSlots-Empire.get(SimonWars.side).occupiedSlots > 0) {
                 SimonWars.dragable.enable(Building.BType.CAMP);
             }
         });
@@ -89,7 +89,7 @@ public class GUISetup {
         GUIGroup blgroup = new GUIGroup(new Vector2f(0.8334f,0.4336f));
         GUIButton ironmine = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         ironmine.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 70 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 70 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100 && Empire.get(SimonWars.side).populationSlots-Empire.get(SimonWars.side).occupiedSlots > 0) {
             SimonWars.dragable.enable(Building.BType.IRONMINE);
             }
         });
@@ -99,7 +99,7 @@ public class GUISetup {
         GUIGroup qlgroup = new GUIGroup(new Vector2f(0.8334f,0.3392f));
         GUIButton quarry = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         quarry.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 10&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 10  && Empire.get(SimonWars.side).populationSlots-Empire.get(SimonWars.side).occupiedSlots > 0) {
                 SimonWars.dragable.enable(Building.BType.QUARRY);
             }
         });
@@ -211,7 +211,7 @@ public class GUISetup {
         ((GUIText)(mainResourceUI.getRoot().getItem("stoneText"))).setText(Integer.toString(e.getAvailable(GameResource.STONE)));
         ((GUIText)(mainResourceUI.getRoot().getItem("foodText"))).setText(Integer.toString(e.getAvailable(GameResource.FOOD)));
         ((GUIText)(mainResourceUI.getRoot().getItem("woodText"))).setText(Integer.toString(e.getAvailable(GameResource.WOOD)));
-        ((GUIText)(mainResourceUI.getRoot().getItem("peopleText"))).setText(e.getAvailable(GameResource.PEOPLESLOT) + "/" +e.populationSlots+
+        ((GUIText)(mainResourceUI.getRoot().getItem("peopleText"))).setText(e.occupiedSlots + "/" +e.populationSlots+
                 " Available People: "+Integer.toString(e.getAvailable(GameResource.PEOPLE)));
         ((GUIText)(mainResourceUI.getRoot().getItem("steelText"))).setText(Integer.toString(e.getAvailable(GameResource.STEEL)));
         ((GUIText)(mainResourceUI.getRoot().getItem("luxuryText"))).setText(Integer.toString(e.getAvailable(GameResource.ENTERTAINMENT))+"/s");
