@@ -9,6 +9,8 @@ public class Town extends Building {
     private int counter = 0;
     public Town(Empire.Side side){
         super(side);
+        Empire.get(SimonWars.side).add(GameResource.PEOPLE,6);
+        Empire.get(SimonWars.side).add(GameResource.PEOPLESLOT,6);
     }
     public void update(float delta){
         regenRate = (Empire.get(SimonWars.side).getAvailable(GameResource.FOOD)<1)? 600:300;
@@ -17,7 +19,7 @@ public class Town extends Building {
             if( Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE) <Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT) ){
                 Empire.get(SimonWars.side).add(GameResource.PEOPLE,1);
             }else if(Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE) > Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)){
-                Empire.get(SimonWars.side).use(GameResource.PEOPLE,Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE)- Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT));
+                Empire.get(SimonWars.side).use(GameResource.PEOPLE,Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLE)- (Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)));
             }
         }
         if(counter % 60 == 0){

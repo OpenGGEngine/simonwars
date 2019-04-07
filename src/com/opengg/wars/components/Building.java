@@ -6,6 +6,7 @@ import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.Models;
+import com.opengg.wars.SimonWars;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
 
@@ -28,36 +29,37 @@ public class Building extends GameObject{
     }
 
     public static Building create(BType type, Empire.Side side) {
+        System.out.println(Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)+","+Empire.get(SimonWars.side).occupiedSlots+","+Empire.get(SimonWars.side).populationSlots);
         switch (type){
             case CAMP:
                 var camp = new ResourceProducer(side);
                 camp.addOutput(GameResource.WOOD, 5);
                 camp.attach(new ModelComponent(Models.forestCamp).setScaleOffset(0.009f));
-
+                Empire.get(SimonWars.side).occupiedSlots++;
                 return camp;
             case IRONMINE:
                 var ironmine = new ResourceProducer(side);
                 ironmine.addOutput(GameResource.IRON, 5);
                 ironmine.attach(new ModelComponent(Models.mine).setScaleOffset(0.1f));
-
+                Empire.get(SimonWars.side).occupiedSlots++;
                 return ironmine;
             case GOLDMINE:
                 var goldmine = new ResourceProducer(side);
                 goldmine.addOutput(GameResource.GOLD, 2);
                 goldmine.attach(new ModelComponent(Models.mine).setScaleOffset(0.1f));
-
+                Empire.get(SimonWars.side).occupiedSlots++;
                 return goldmine;
             case QUARRY:
                 var quarry = new ResourceProducer(side);
                 quarry.addOutput(GameResource.STONE, 5);
                 quarry.attach(new ModelComponent(Models.mine)).setScaleOffset(0.1f);
-
+                Empire.get(SimonWars.side).occupiedSlots++;
                 return quarry;
             case FARM:
                 var farm = new ResourceProducer(side);
                 farm.addOutput(GameResource.FOOD, 5);
                 farm.attach(new ModelComponent(Models.farm).setRotationOffset(new Vector3f(0,0,-90)));
-
+                Empire.get(SimonWars.side).occupiedSlots++;
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
@@ -65,6 +67,7 @@ public class Building extends GameObject{
                 factory.addOutput(GameResource.ENTERTAINMENT,1,Tuple.of(GameResource.GOLD,5));
                 factory.addOutput(GameResource.NONE,0,Tuple.of(GameResource.NONE,0));
                 factory.attach(new ModelComponent(Models.factory));
+                Empire.get(SimonWars.side).occupiedSlots++;
                 return factory;
             case BARRACKS:
                 var barracks = new UnitProducer(side);
@@ -79,6 +82,11 @@ public class Building extends GameObject{
                 return town;
         }
         return null;
+    }
+
+    @Override
+    public void kill() {
+        super.kill();
     }
 
     @Override
