@@ -31,22 +31,32 @@ public class Building extends GameObject{
             case CAMP:
                 var camp = new ResourceProducer(side);
                 camp.addOutput(GameResource.WOOD, 5);
+                camp.attach(new ModelComponent(Models.factory));
+
                 return camp;
             case IRONMINE:
                 var ironmine = new ResourceProducer(side);
                 ironmine.addOutput(GameResource.IRON, 5);
+                ironmine.attach(new ModelComponent(Models.factory));
+
                 return ironmine;
             case GOLDMINE:
                 var goldmine = new ResourceProducer(side);
                 goldmine.addOutput(GameResource.GOLD, 2);
+                goldmine.attach(new ModelComponent(Models.factory));
+
                 return goldmine;
             case QUARRY:
                 var quarry = new ResourceProducer(side);
                 quarry.addOutput(GameResource.STONE, 5);
+                quarry.attach(new ModelComponent(Models.factory));
+
                 return quarry;
             case FARM:
                 var farm = new ResourceProducer(side);
                 farm.addOutput(GameResource.FOOD, 5);
+                farm.attach(new ModelComponent(Models.factory));
+
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
