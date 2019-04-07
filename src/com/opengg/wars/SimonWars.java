@@ -16,8 +16,11 @@ import com.opengg.core.math.Tuple;
 import com.opengg.core.math.Vector2i;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.network.NetworkEngine;
+import com.opengg.core.network.Packet;
 import com.opengg.core.render.texture.Texture;
 import com.opengg.core.render.window.WindowInfo;
+import com.opengg.core.util.GGInputStream;
+import com.opengg.core.util.GGOutputStream;
 import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.ModelComponent;
@@ -25,7 +28,9 @@ import com.opengg.core.world.components.WorldObject;
 import com.opengg.wars.components.*;
 import com.opengg.wars.game.Deposit;
 import com.opengg.wars.game.Empire;
+import com.opengg.wars.game.GameResource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +39,7 @@ import static com.opengg.core.io.input.keyboard.Key.*;
 
 public class SimonWars extends GGApplication implements MouseButtonListener {
     public static final byte COMMAND_SEND_PACKET = 10;
+    public static final byte EMPIRE_SEND_PACKET = 11;
 
     public static boolean[][] map = new boolean[192][192];
     public static int[][] blockers;
@@ -45,6 +51,8 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
     public static Empire.Side side = Empire.Side.RED;
     public static GhostComponent dragable;
+
+    public static float empireTimer = 0;
 
     public static void main(String... args){
         if(args.length > 0 && args[0].equals("server")){
@@ -81,7 +89,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
             MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
 
-            var unit = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
+            var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
             unit.setPositionOffset(new Vector3f(180, 0, 5));
             unit.calculateAndUsePath(unit.getPosition().xz());
             WorldEngine.getCurrent().attach(unit);
@@ -119,6 +127,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             }else{
                 MapGenerator.generateFromMaps();
                 NetworkEngine.connect("localhost", 25565);
+                NetworkEngine.getReceiver().addProcessor(EMPIRE_SEND_PACKET, this::updateEmpires);
                 side = GGInfo.getUserId() == 0 ? Empire.Side.RED : Empire.Side.BLUE;
             }
 
@@ -148,6 +157,59 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
         }
     }
 
+    public void updateEmpires(Packet packet) {
+        try {
+            var in = new GGInputStream(packet.getData());
+            for (int i = 0; i < 2; i++) {
+                var empire = Empire.get(i == 0 ? Empire.Side.RED : Empire.Side.BLUE);
+
+                empire.populations = in.readInt();
+                empire.occupiedSlots = in.readInt();
+                empire.populationSlots = in.readInt();
+                empire.energyPerTick = in.readInt();
+                empire.energyUsedPerTick = in.readInt();
+                empire.entertainmentPerTick = in.readInt();
+                empire.entertainmentUsedPerTick = in.readInt();
+                empire.resources.put(GameResource.WOOD, in.readInt());
+                empire.resources.put(GameResource.STONE, in.readInt());
+                empire.resources.put(GameResource.STEEL, in.readInt());
+                empire.resources.put(GameResource.IRON, in.readInt());
+                empire.resources.put(GameResource.GOLD, in.readInt());
+                empire.resources.put(GameResource.FOOD, in.readInt());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendEmpires() {
+        try {
+            var out = new GGOutputStream();
+            for (int i = 0; i < 2; i++) {
+                var empire = Empire.get(i == 0 ? Empire.Side.RED : Empire.Side.BLUE);
+
+                out.write(empire.populations);
+                out.write(empire.occupiedSlots);
+                out.write(empire.populationSlots);
+                out.write(empire.energyPerTick);
+                out.write(empire.energyUsedPerTick);
+                out.write(empire.entertainmentPerTick);
+                out.write(empire.entertainmentUsedPerTick);
+                out.write(empire.resources.get(GameResource.WOOD));
+                out.write(empire.resources.get(GameResource.STONE));
+                out.write(empire.resources.get(GameResource.STEEL));
+                out.write(empire.resources.get(GameResource.IRON));
+                out.write(empire.resources.get(GameResource.GOLD));
+                out.write(empire.resources.get(GameResource.FOOD));
+            }
+            for(var conn : NetworkEngine.getServer().getClients()){
+                Packet.sendGuaranteed(NetworkEngine.getSocket(), EMPIRE_SEND_PACKET, out.asByteArray(), conn.getConnection());
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void render() {
 
@@ -157,7 +219,11 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public void update(float delta) {
         CommandManager.update();
         if(GGInfo.isServer()){
-
+            empireTimer++;
+            if(empireTimer > 1f/10f){
+                empireTimer = 0;
+                sendEmpires();
+            }
         }else{
             GUISetup.updateResourceMenu();
         }

@@ -42,7 +42,7 @@ public class UnitProducer extends Building{
     }
 
     public void spawnUnit(Unit.UType type){
-        if(dropoffPoint == null) dropoffPoint = this.getPosition().add(new Vector3f(3,0,0)).xz();
+        if(dropoffPoint == null) dropoffPoint = this.getPosition().add(new Vector3f(5,0,0)).xz();
         var data = unitCreations.stream().filter(c -> c.y == type).findFirst().get();
         var canMake = data.x.stream()
                 .allMatch(p -> Empire.get(this.side).getAvailable(p.x) > p.y);
