@@ -62,7 +62,7 @@ public class Building extends GameObject{
                 return farm;
             case FACTORY:
                 var factory = new ResourceProducer(side);
-                factory.addOutput(GameResource.STEEL, 5, Tuple.of(GameResource.IRON, 5));
+                factory.addOutput(GameResource.STEEL, 2, Tuple.of(GameResource.IRON, 5));
                 factory.addOutput(GameResource.ENTERTAINMENT,1,Tuple.of(GameResource.GOLD,5));
                 factory.addOutput(GameResource.NONE,0,Tuple.of(GameResource.NONE,0));
                 factory.attach(new ModelComponent(Models.factory));
@@ -72,7 +72,7 @@ public class Building extends GameObject{
                 var barracks = new UnitProducer(side);
                 barracks.addUnit(Unit.UType.INFANTRY, Tuple.of(GameResource.STONE, 25), Tuple.of(GameResource.FOOD, 20));
                 barracks.addUnit(Unit.UType.CAVALRY, Tuple.of(GameResource.STEEL, 20), Tuple.of(GameResource.FOOD, 12));
-                barracks.addUnit(Unit.UType.ARCHER, Tuple.of(GameResource.STONE, 20), Tuple.of(GameResource.WOOD, 35));
+                barracks.addUnit(Unit.UType.ARCHER, Tuple.of(GameResource.STONE, 25), Tuple.of(GameResource.WOOD, 45));
                 barracks.attach(new ModelComponent(Models.barrack).setScaleOffset(0.02f).setRotationOffset(new Vector3f(90,0,0)));
                 return barracks;
             case TOWN:
