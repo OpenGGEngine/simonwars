@@ -3,13 +3,14 @@ package com.opengg.wars;
 import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
 import com.opengg.core.io.input.mouse.MouseController;
-import com.opengg.core.math.FastMath;
-import com.opengg.core.math.Vector2f;
-import com.opengg.core.math.Vector3f;
+import com.opengg.core.math.*;
 import com.opengg.core.render.RenderEngine;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.components.Building;
+import com.opengg.wars.game.Deposit;
 import com.opengg.wars.game.Empire;
+
+import java.util.List;
 
 public class GhostComponent extends ModelComponent implements MouseButtonListener {
     Building.BType type = Building.BType.FACTORY;
@@ -36,11 +37,25 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
 
         if(!isEnabled()) return;
         if(button == MouseButton.LEFT){
+            boolean oneByResource = false;
             for(Vector2f check:collisions){
                 int x = (int)getPosition().x; int z = (int)getPosition().z;
                 int xPos = x+(int)check.x; int zPos = z+(int)check.y;
                 if(xPos > SimonWars.map.length || xPos<0||zPos<0||zPos>SimonWars.map[0].length)return;
                 if(!SimonWars.map[xPos][zPos]) return;
+                for(int i = -1;i<2;i++){
+                    for(int i2 = -1;i2<2;i2++){
+                        for(Tuple<Vector2i, Deposit> deposit: SimonWars.deposits){
+                            if(deposit.x.equals(new Vector2i(xPos+i,zPos+i2))) {
+                                oneByResource |= (deposit.y == Deposit.IRON && type == Building.BType.IRONMINE)||(deposit.y == Deposit.GOLD && type == Building.BType.GOLDMINE)||
+                                        (deposit.y == Deposit.STONE && type == Building.BType.QUARRY)||
+                                        (deposit.y == Deposit.WOOD && type == Building.BType.CAMP)
+                                        ||(type == Building.BType.FACTORY)||(type == Building.BType.TOWN)||(type == Building.BType.FARM);
+                            }
+                        }
+                    }
+                }
+                if(!oneByResource)return;
                 CommandManager.sendCommand(Command.create("building_create",  type.toString(), x+","+z, SimonWars.side.toString()));
                 this.setEnabled(false);
             }
@@ -64,6 +79,10 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
             case TOWN:
                 setModel(Models.house);
                 setRotationOffset(new Vector3f(0,0,90));
+                setScaleOffset(1f);
+                break;
+            case FARM:
+                setModel(Models.house);
                 setScaleOffset(1f);
                 break;
         }
