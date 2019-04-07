@@ -164,7 +164,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             selected.clear();
 
             if(currentSelection != null){
-                GUIController.deactivateGUI(currentSelection.getName());
+                GUIController.deactivateGUI(currentSelection.getRoot().getName());
             }
 
             if(allfound.isEmpty()){

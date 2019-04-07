@@ -8,6 +8,6 @@ public class Models {
     public static Model factory;
     public static void init(){
         factory = Resource.getModel("TheFactory");
-        //stone = Resource.getModel("");
+        stone = Resource.getModel("Rock_6");
     }
 }

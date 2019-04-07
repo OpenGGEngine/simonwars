@@ -58,6 +58,6 @@ public class MapGenerator {
         WaterComponent water = new WaterComponent(Resource.getTexture("water.jpg").getData().get(0),1000f);
         water.setPositionOffset(new Vector3f(0,-1,0));
         WorldEngine.getCurrent().attach(water);
-        return List.of(terrainComp.setPositionOffset(0,5,0), light,water);
+        return List.of(terrainComp.setPositionOffset(0,5,0), water,light);
     }
 }
