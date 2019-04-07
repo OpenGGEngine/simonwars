@@ -35,7 +35,7 @@ public class Unit extends GameObject{
     List<Vector2f> path;
 
     public enum UType{
-        WORKER, CAVALRY, INFANTRY, ARCHER
+        WORKER, CAVALRY, INFANTRY, ARCHER,MASTERMOLE
     }
 
     public Unit(){
@@ -103,6 +103,20 @@ public class Unit extends GameObject{
                 worker.attach(new SpriteRenderComponent(side + "/Worker.png").setRotationOffset(new Vector3f(-15,45,0)).setScaleOffset(3));
                 worker.visibleName = "Villager";
                 return worker;
+            case MASTERMOLE:
+                Unit mm = new Unit(side);
+                mm.health = 60;
+                mm.maxhealth = 60;
+                mm.armor = 4;
+                mm.pierceArmor = 5;
+                mm.speed = 5f;
+                mm.getAttack().attack = 2;
+                mm.getAttack().pierceAttack = 1;
+                mm.getAttack().range = 2;
+                mm.getAttack().speed = 2f;
+                mm.attach(new SpriteRenderComponent(side + "/mole.png").setRotationOffset(new Vector3f(-15,45,0)).setScaleOffset(3));
+                mm.visibleName = "M-Mole";
+                return mm;
         }
         return null;
     }
