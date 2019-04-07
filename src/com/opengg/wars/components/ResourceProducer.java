@@ -39,7 +39,15 @@ public class ResourceProducer extends Building{
     public void serialize(GGOutputStream out) throws IOException {
         super.serialize(out);
         out.write(products.size());
-
+        for(var product : products){
+            out.write(product.y.x.ordinal());
+            out.write(product.y.y);
+            out.write(product.x.size());
+            for(var input : product.x){
+                out.write(input.x.ordinal());
+                out.write(input.y);
+            }
+        }
     }
 
     @Override
@@ -50,8 +58,20 @@ public class ResourceProducer extends Building{
     @Override
     public void deserialize(GGInputStream in) throws IOException {
         super.deserialize(in);
-        complete = in.readBoolean();
-        menuOnClick = in.readString();
+        var prodSize = in.readInt();
+        for(int i = 0; i < prodSize; i++){
+            var prodType = GameResource.values()[in.readInt()];
+            var prodAmount = in.readInt();
+            var priceSize = in.readInt();
+            var amount = new ArrayList<Tuple<GameResource, Integer>>();
+            for(int j = 0; j < priceSize; j++) {
+                var priceType = GameResource.values()[in.readInt()];
+                var priceAmount = in.readInt();
+                amount.add(Tuple.of(priceType, priceAmount));
+            }
+
+            products.add(Tuple.of(amount, Tuple.of(prodType,prodAmount)));
+        }
     }
 
     @Override

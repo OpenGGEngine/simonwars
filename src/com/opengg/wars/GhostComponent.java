@@ -26,6 +26,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
 
     @Override
     public void onButtonPress(int button) {
+        if(!isEnabled()) return;
         if(button == MouseButton.LEFT){
             for(Vector2f check:collisions){
                 int x = (int)getPosition().x; int z = (int)getPosition().z;
@@ -33,8 +34,15 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
                 if(xPos > SimonWars.map.length || xPos<0||zPos<0||zPos>SimonWars.map[0].length)return;
                 if(!SimonWars.map[xPos][zPos]) return;
                 CommandManager.sendCommand(Command.create("building_create",  type.toString(), x+","+z, SimonWars.side.toString()));
+                this.setEnabled(false);
             }
         }
+    }
+
+    public void enable(Building.BType type){
+        this.type = type;
+        this.setEnabled(true);
+
     }
 
     @Override

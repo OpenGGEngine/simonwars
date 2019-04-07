@@ -5,6 +5,7 @@ import com.opengg.core.engine.BindController;
 import com.opengg.core.engine.GGApplication;
 import com.opengg.core.engine.OpenGG;
 import com.opengg.core.engine.Resource;
+import com.opengg.core.gui.GUI;
 import com.opengg.core.gui.GUIController;
 import com.opengg.core.io.ControlType;
 import com.opengg.core.io.input.mouse.MouseButton;
@@ -19,10 +20,7 @@ import com.opengg.core.world.Skybox;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.core.world.components.WorldObject;
-import com.opengg.wars.components.GameObject;
-import com.opengg.wars.components.Unit;
-import com.opengg.wars.components.UnitProducer;
-import com.opengg.wars.components.UserViewComponent;
+import com.opengg.wars.components.*;
 import com.opengg.wars.game.Empire;
 
 import java.util.ArrayList;
@@ -37,8 +35,9 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static boolean[][] map = new boolean[512][512];
     public static int[][] blockers;
 
-    public static boolean offline = false;
+    public static boolean offline = true;
     public static List<GameObject> selected = new ArrayList<>();
+    public static GUI currentSelection;
 
     public static Empire.Side side = Empire.Side.RED;
 
@@ -121,6 +120,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
             GhostComponent dragable = new GhostComponent();
             dragable.setModel(Resource.getModel("TheFactory"));
+            dragable.enable(Building.BType.BARRACKS);
             WorldEngine.getCurrent().attach(dragable);
 
             WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20,600f,20)).setScaleOffset(new Vector3f(2f)));
@@ -158,17 +158,32 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                     .collect(Collectors.toList());
 
             selected.clear();
+
+            if(currentSelection != null){
+                GUIController.deactivateGUI(currentSelection.getName());
+            }
+
             if(allfound.isEmpty()){
-                GUIController.deactivateGUI("unitGUI");
+
             }else{
-                selected.addAll(allfound);
-                if(allfound.size() == 1){
-                    if(allfound.get(0) instanceof Unit){
-                        var unit = (Unit) allfound.get(0);
-                        GUIController.activateGUI("unitGUI");
-                        GUISetup.updateUnitMenu(unit);
+                OpenGG.asyncExec(() -> {
+                    selected.addAll(allfound);
+                    if(allfound.size() == 1){
+                        if(allfound.get(0) instanceof Unit){
+                            var unit = (Unit) allfound.get(0);
+                            GUIController.activateGUI("unitGUI");
+                            currentSelection = GUIController.get("unitGUI");
+                            GUISetup.updateUnitMenu(unit);
+                        }else if(allfound.get(0) instanceof UnitProducer){
+                            currentSelection = GUISetup.updateUnitProducer((UnitProducer) allfound.get(0));
+                            GUIController.addAndUse(currentSelection, "unitProd");
+                        }else if(allfound.get(0) instanceof ResourceProducer){
+                            currentSelection = GUISetup.getFactoryGUI((ResourceProducer) allfound.get(0));
+                            GUIController.addAndUse(currentSelection, "producer");
+                        }
                     }
-                }
+                });
+
             }
         }
         if(button == MouseButton.RIGHT){

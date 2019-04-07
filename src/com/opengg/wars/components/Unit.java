@@ -11,6 +11,7 @@ import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.AStar;
 import com.opengg.wars.Node;
 import com.opengg.wars.SimonWars;
+import com.opengg.wars.SpriteRenderComponent;
 import com.opengg.wars.game.Empire;
 
 import java.io.IOException;
@@ -41,6 +42,17 @@ public class Unit extends GameObject{
     }
 
     public static Unit spawn(UType type, Empire.Side side){
+        switch (type) {
+            case INFANTRY:
+                Unit unit = new Unit(side);
+                unit.armor = 4;
+                unit.pierceArmor = 3;
+                unit.getAttack().attack = 4;
+                unit.getAttack().pierceAttack = 0;
+                unit.getAttack().range = 0;
+                unit.attach(new SpriteRenderComponent());
+                return unit;
+        }
         return null;
     }
 
