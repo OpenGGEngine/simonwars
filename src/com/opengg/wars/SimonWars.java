@@ -40,7 +40,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static GUI currentSelection;
 
     public static Empire.Side side = Empire.Side.RED;
-    private GhostComponent dragable;
+    public static GhostComponent dragable;
 
     public static void main(String... args){
         if(args.length > 0 && args[0].equals("server")){
@@ -96,7 +96,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
-                var unit = new Unit(Empire.Side.RED);
+                var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
                 unit.setPositionOffset(new Vector3f(500, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);
@@ -124,7 +124,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             dragable = new GhostComponent();
             dragable.setId(1293487023);
             dragable.setModel(Resource.getModel("TheFactory"));
-            dragable.enable(Building.BType.BARRACKS);
+            dragable.setEnabled(false);
             WorldEngine.getCurrent().attach(dragable);
 
             WorldEngine.getCurrent().attach(new ModelComponent(Models.factory).setPositionOffset(new Vector3f(20,600f,20)).setScaleOffset(new Vector3f(2f)));
@@ -164,16 +164,18 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             selected.clear();
 
             if(currentSelection != null){
-                GUIController.deactivateGUI(currentSelection.getRoot().getName());
+                GUIController.deactivateGUI(currentSelection.getName());
             }
 
-            if(allfound.isEmpty()){
-
-            }else{
+            if (!allfound.isEmpty()) {
                 OpenGG.asyncExec(() -> {
                     selected.addAll(allfound);
                     if(allfound.size() == 1){
-                        if(allfound.get(0) instanceof Unit){
+                        if(allfound.get(0) instanceof Villager){
+                            var unit = (Villager) allfound.get(0);
+                            GUIController.activateGUI("builderGUI");
+                            currentSelection = GUIController.get("builderGUI");
+                        }else if(allfound.get(0) instanceof Unit){
                             var unit = (Unit) allfound.get(0);
                             GUIController.activateGUI("unitGUI");
                             currentSelection = GUIController.get("unitGUI");
@@ -181,6 +183,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         }else if(allfound.get(0) instanceof UnitProducer){
                             currentSelection = GUISetup.updateUnitProducer((UnitProducer) allfound.get(0));
                             GUIController.addAndUse(currentSelection, "unitProd");
+                            System.out.println(currentSelection.getName());
                         }else if(allfound.get(0) instanceof ResourceProducer){
                             currentSelection = GUISetup.getFactoryGUI((ResourceProducer) allfound.get(0));
                             GUIController.addAndUse(currentSelection, "producer");
@@ -190,6 +193,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
             }
         }
+
         if(button == MouseButton.RIGHT){
             var ray = MouseController.getRay();
             var pos = FastMath.getRayPlaneIntersection(ray.getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));

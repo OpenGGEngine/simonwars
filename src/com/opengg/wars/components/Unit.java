@@ -11,7 +11,6 @@ import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.AStar;
 import com.opengg.wars.Node;
 import com.opengg.wars.SimonWars;
-import com.opengg.wars.SpriteRenderComponent;
 import com.opengg.wars.game.Empire;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class Unit extends GameObject{
     List<Vector2f> path;
 
     public enum UType{
-        VILLAGER, WORKER, CAVALRY, INFANTRY, ARCHER
+        WORKER, CAVALRY, INFANTRY, ARCHER
     }
 
     public Unit(){
@@ -70,6 +69,15 @@ public class Unit extends GameObject{
                 archer.getAttack().range = 0;
                 archer.attach(new SpriteRenderComponent());
                 return archer;
+            case WORKER:
+                Villager worker = new Villager(side);
+                worker.armor = 4;
+                worker.pierceArmor = 3;
+                worker.getAttack().attack = 4;
+                worker.getAttack().pierceAttack = 0;
+                worker.getAttack().range = 0;
+                worker.attach(new SpriteRenderComponent());
+                return worker;
         }
         return null;
     }

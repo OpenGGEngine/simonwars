@@ -97,8 +97,17 @@ public class UnitProducer extends Building{
     @Override
     public void deserialize(GGInputStream in) throws IOException {
         super.deserialize(in);
-        complete = in.readBoolean();
-        menuOnClick = in.readString();
+        var size = in.readInt();
+        for(int i = 0; i < size; i++){
+            var create = in.readString();
+            var priceAmount = in.readInt();
+            var amount = new ArrayList<Tuple<GameResource, Integer>>();
+            for(int j = 0; j < priceAmount; j++){
+                amount.add(Tuple.of(GameResource.valueOf(in.readString()), in.readInt()));
+            }
+
+            unitCreations.add(Tuple.of(amount, Unit.UType.valueOf(create)));
+        }
     }
 
     @Override

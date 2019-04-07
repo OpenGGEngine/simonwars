@@ -1,4 +1,4 @@
-package com.opengg.wars;
+package com.opengg.wars.components;
 
 import com.opengg.core.engine.Resource;
 import com.opengg.core.math.Vector2f;
