@@ -7,6 +7,7 @@ import com.opengg.core.engine.OpenGG;
 import com.opengg.core.engine.Resource;
 import com.opengg.core.gui.GUI;
 import com.opengg.core.gui.GUIController;
+import com.opengg.core.gui.GUIProgressBar;
 import com.opengg.core.io.ControlType;
 import com.opengg.core.io.input.mouse.MouseButton;
 import com.opengg.core.io.input.mouse.MouseButtonListener;
@@ -163,6 +164,8 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 if (SimonWars.selected.get(0) instanceof UnitProducer && SimonWars.currentSelection != null) {
                     ((GUIProgressBar) SimonWars.currentSelection.getRoot().getItem("progress")).setPercent(((UnitProducer) SimonWars.selected.get(0)).progress/100);
                     ((GUIProgressBar) SimonWars.currentSelection.getRoot().getItem("health")).setPercent((float)((UnitProducer) SimonWars.selected.get(0)).health/SimonWars.selected.get(0).getHealth());
+                }else if(SimonWars.selected.get(0) instanceof Unit){
+                    GUISetup.updateUnitMenu((Unit)SimonWars.selected.get(0));
                 }
             }
             GUISetup.updateResourceMenu();
