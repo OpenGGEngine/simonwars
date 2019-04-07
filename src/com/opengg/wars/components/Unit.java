@@ -23,7 +23,7 @@ public class Unit extends GameObject{
 
     Vector2f lastTargetPos = new Vector2f();
     public GameObject target;
-    Vector2f nextNode;
+    Vector2f nextNode = new Vector2f(0,0);
 
     float timeSinceLastAttack = 0;
     float timeSinceLastUpdate = 0;

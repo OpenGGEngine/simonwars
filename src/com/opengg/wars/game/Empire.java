@@ -16,7 +16,7 @@ public class Empire {
 
     public int energyPerTick = 0;
     public int energyUsedPerTick = 0;
-    public int entertainmentPerTick = 800;
+    public int entertainmentPerTick = 200;
     public int entertainmentUsedPerTick = 0;
 
 
@@ -33,7 +33,7 @@ public class Empire {
     public Empire(){
         resources.put(GameResource.FOOD, 100);
         resources.put(GameResource.GOLD, 50);
-        resources.put(GameResource.WOOD, 200);
+        resources.put(GameResource.WOOD, 150);
         resources.put(GameResource.STEEL, 0);
         resources.put(GameResource.STONE, 100);
         resources.put(GameResource.IRON, 100);
