@@ -212,7 +212,7 @@ public class GUISetup {
         ((GUIText)(mainResourceUI.getRoot().getItem("foodText"))).setText(Integer.toString(e.getAvailable(GameResource.FOOD)));
         ((GUIText)(mainResourceUI.getRoot().getItem("woodText"))).setText(Integer.toString(e.getAvailable(GameResource.WOOD)));
         ((GUIText)(mainResourceUI.getRoot().getItem("peopleText"))).setText(e.occupiedSlots + "/" +e.populationSlots+
-                " Available People: "+Integer.toString(e.getAvailable(GameResource.PEOPLE)));
+                " Available People: "+ (e.populations-e.occupiedSlots));
         ((GUIText)(mainResourceUI.getRoot().getItem("steelText"))).setText(Integer.toString(e.getAvailable(GameResource.STEEL)));
         ((GUIText)(mainResourceUI.getRoot().getItem("luxuryText"))).setText(Integer.toString(e.getAvailable(GameResource.ENTERTAINMENT))+"/s");
         ((GUIText)(mainResourceUI.getRoot().getItem("energyText"))).setText(Integer.toString(e.getAvailable(GameResource.ENERGY))+"/s");

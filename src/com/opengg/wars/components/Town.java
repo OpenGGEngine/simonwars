@@ -26,14 +26,19 @@ public class Town extends Building {
             regenRate = (Empire.get(side).getAvailable(GameResource.FOOD)<1)? 600:300;
             super.update(delta);
             if(counter % regenRate == 0){
+                System.out.println(Empire.get(this.side).populations);
+                System.out.println(Empire.get(this.side).populationSlots);
+
                 if( Empire.get(this.side).populations < Empire.get(this.side).populationSlots ){
-                    Empire.get(side).add(GameResource.PEOPLE,1);
+                    System.out.println("lkfds;lk");
+                    System.out.println();
+                    Empire.get(side).populations++;
                 }else if(Empire.get(side).getAvailable(GameResource.PEOPLE) > Empire.get(side).getAvailable(GameResource.PEOPLESLOT)){
                     Empire.get(side).use(GameResource.PEOPLE,Empire.get(side).getAvailable(GameResource.PEOPLE) - (Empire.get(side).getAvailable(GameResource.PEOPLESLOT)));
                 }
             }
             if(counter % 60 == 0){
-                Empire.get(side).use(GameResource.FOOD,5*(Empire.get(side).getAvailable(GameResource.PEOPLESLOT)));
+                Empire.get(side).use(GameResource.FOOD, Empire.get(this.side).populations);
             }
             counter+=1;
         }

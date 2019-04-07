@@ -57,9 +57,9 @@ public class UnitProducer extends Building{
     @Override
     public void update(float delta)  {
         if(GGInfo.isServer() || SimonWars.offline) {
-            Empire.get(SimonWars.side).use(GameResource.ENTERTAINMENT,2);
+            Empire.get(side).use(GameResource.ENTERTAINMENT,2);
             if(!unitQueue.isEmpty()){
-                progress += delta * Empire.get(SimonWars.side).getAvailable(GameResource.ENTERTAINMENT) > 60?15: 10;
+                progress += delta * Empire.get(side).getAvailable(GameResource.ENTERTAINMENT) > 60?15: 10;
                 if(progress > 100){
                     progress = 0;
                     var unitType = unitQueue.get(0);

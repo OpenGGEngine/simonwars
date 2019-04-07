@@ -12,7 +12,7 @@ public class Empire {
 
     public int populationSlots = 2;
     public int occupiedSlots = 0;
-    public int populations = 0;
+    public int populations = 2;
 
     public int energyPerTick = 0;
     public int energyUsedPerTick = 0;
