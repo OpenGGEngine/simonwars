@@ -63,6 +63,7 @@ public class Building extends GameObject{
                 var factory = new ResourceProducer(side);
                 factory.addOutput(GameResource.STEEL, 5, Tuple.of(GameResource.IRON, 5));
                 factory.addOutput(GameResource.ENTERTAINMENT,1,Tuple.of(GameResource.GOLD,5));
+                factory.addOutput(GameResource.NONE,0,Tuple.of(GameResource.NONE,0));
                 factory.attach(new ModelComponent(Models.factory));
                 return factory;
             case BARRACKS:
@@ -73,7 +74,7 @@ public class Building extends GameObject{
                 barracks.attach(new ModelComponent(Models.barrack).setScaleOffset(0.02f).setRotationOffset(new Vector3f(90,0,0)));
                 return barracks;
             case TOWN:
-                var town = new ResourceProducer(side);
+                var town = new Town(side);
                 town.attach(new ModelComponent(Models.house).setRotationOffset(new Vector3f(270,180,180)).setScaleOffset(0.5f));
                 return town;
         }

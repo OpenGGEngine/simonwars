@@ -12,7 +12,8 @@ public enum GameResource {
     GOLD(Resource.getTexturePath("gold.png")),
     ENERGY(Resource.getTexturePath("energy.png")),
     STEEL(Resource.getTexturePath("steel.png")),
-    ENTERTAINMENT(Resource.getTexturePath("entertainment.png"));
+    ENTERTAINMENT(Resource.getTexturePath("entertainment.png")),
+    NONE(Resource.getTexturePath("steel.png"));
 
     String path;
 
