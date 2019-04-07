@@ -3,6 +3,7 @@ package com.opengg.wars.components;
 import com.opengg.core.physics.collision.AABB;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
+import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.Component;
 import com.opengg.wars.game.Empire;
 
@@ -15,7 +16,7 @@ public class GameObject extends Component {
     String visibleName = "ladical";
 
     int maxhealth = 100;
-    int health = 100;
+    public int health = 100;
 
     int armor = 100;
     int pierceArmor = 1;
@@ -44,6 +45,12 @@ public class GameObject extends Component {
 
     public float getColliderWidth(){
         return colliderWidth;
+    }
+
+    public void update(float delta){
+        if(health <=0){
+            WorldEngine.markForRemoval(this);
+        }
     }
 
     @Override
