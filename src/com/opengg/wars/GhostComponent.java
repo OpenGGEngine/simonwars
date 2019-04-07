@@ -37,7 +37,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
 
         if(!isEnabled()) return;
         if(button == MouseButton.LEFT){
-            boolean oneByResource = false;
+            boolean oneByResource = (type == Building.BType.FACTORY)||(type == Building.BType.TOWN)||(type == Building.BType.FARM)||(type==Building.BType.BARRACKS);
             for(Vector2f check:collisions){
                 int x = (int)getPosition().x; int z = (int)getPosition().z;
                 int xPos = x+(int)check.x; int zPos = z+(int)check.y;
@@ -49,8 +49,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
                             if(deposit.x.equals(new Vector2i(xPos+i,zPos+i2))) {
                                 oneByResource |= (deposit.y == Deposit.IRON && type == Building.BType.IRONMINE)||(deposit.y == Deposit.GOLD && type == Building.BType.GOLDMINE)||
                                         (deposit.y == Deposit.STONE && type == Building.BType.QUARRY)||
-                                        (deposit.y == Deposit.WOOD && type == Building.BType.CAMP)
-                                        ||(type == Building.BType.FACTORY)||(type == Building.BType.TOWN)||(type == Building.BType.FARM);
+                                        (deposit.y == Deposit.WOOD && type == Building.BType.CAMP);
                             }
                         }
                     }

@@ -216,6 +216,8 @@ public class GUISetup {
             newGUI.addItem(Integer.toString(index), group);
             index++;
         }
+        newGUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.1567f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
+        newGUI.addItem("progress",new GUIProgressBar(new Vector2f(0.85156f,0.0567f),new Vector2f(0.129675f,0.0185f),new Vector3f(0,0.2f,1),new Vector3f(0.5f)));
         return newGUI;
     }
 }
