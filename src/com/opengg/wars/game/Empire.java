@@ -58,7 +58,6 @@ public class Empire {
 
     public int getAvailable(GameResource resource)
     {
-        System.out.println(populationSlots +"," +occupiedSlots);
         if(resources.containsKey(resource))
             return resources.get(resource);
         if(resource == GameResource.PEOPLE)

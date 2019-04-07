@@ -29,7 +29,6 @@ public class Building extends GameObject{
     }
 
     public static Building create(BType type, Empire.Side side) {
-        System.out.println(Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)+","+Empire.get(SimonWars.side).occupiedSlots+","+Empire.get(SimonWars.side).populationSlots);
         switch (type){
             case CAMP:
                 var camp = new ResourceProducer(side);
