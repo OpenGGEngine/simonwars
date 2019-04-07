@@ -39,11 +39,21 @@ public class UnitProducer extends Building{
         dropoffPoint = point;
     }
 
+    public void spawnUnit(Unit.UType type){
+        System.out.println(type);
+        var data = unitCreations.stream().filter(c -> c.y == type).findFirst().get();
+        var canMake = data.x.stream()
+                .allMatch(p -> Empire.get(this.side).getAvailable(p.x) > p.y);
+        if(canMake)
+            unitQueue.add(type);
+    }
+
     @Override
     public void update(float delta)  {
         if(GGInfo.isServer() || SimonWars.offline) {
             if(!unitQueue.isEmpty()){
-                progress += delta * 5;
+                System.out.println(progress);
+                progress += delta * 30;
                 if(progress > 100){
                     progress = 0;
                     var unitType = unitQueue.get(0);

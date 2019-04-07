@@ -79,7 +79,6 @@ public class GUISetup {
         resourceUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.52167f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
         resourceUI.addItem("icon",new GUITexture(Textures.foodIcon,new Vector2f(0.853f,0.568f),new Vector2f(0.122667f,0.122667f)));
         GUIController.add(resourceUI,"resourceGUI");
-        GUIController.activateGUI("resourceGUI");
     }
     public static void initBarracksGUI(){
         barracksUI = new GUI();
@@ -163,47 +162,49 @@ public class GUISetup {
     }
     public static GUI getFactoryGUI(ResourceProducer producer){
         GUI newGUI = new GUI();
-        int index=0;
-        for(Tuple<List<Tuple<GameResource,Integer>>, Tuple<GameResource, Integer>> product :producer.products){
-            GUIGroup group = new GUIGroup(new Vector2f(0.8334f,1f-(index*0.0944f)));
-            GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
-            String resourceList="";
-            for(Tuple<GameResource,Integer> resource: product.getFirst()){
-                resourceList+=(resource.x.name()+": "+resource.y+"\n");
+        int index = 0;
+        for (Tuple<List<Tuple<GameResource, Integer>>, Tuple<GameResource, Integer>> product : producer.products) {
+            GUIGroup group = new GUIGroup(new Vector2f(0.8334f, 1f - (index * 0.0944f)));
+            GUIButton factory = new GUIButton(new Vector2f(0, 0), new Vector2f(0.1625f, 0.0944f), Textures.button);
+            String resourceList = "";
+            for (Tuple<GameResource, Integer> resource : product.getFirst()) {
+                resourceList += (resource.x.name() + ": " + resource.y + "\n");
             }
-            group.addItem("name", new GUIText(Text.from(product.y.x.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
-            group.addItem("button",factory);
-            factory.setOnClick(()->{
+            group.addItem("name", new GUIText(Text.from(product.y.x.name() + "\n" + resourceList).size(0.2f), Textures.dFont, new Vector2f(0.01f, -0.032f)));
+            group.addItem("button", factory);
+            factory.setOnClick(() -> {
                 Empire e = Empire.get(SimonWars.side);
-                for(Tuple<GameResource,Integer> resource: product.getFirst()){
-                    if(e.getAvailable(resource.x)<resource.y)return;
+                for (Tuple<GameResource, Integer> resource : product.getFirst()) {
+                    if (e.getAvailable(resource.x) < resource.y) return;
                 }
             });
-            newGUI.addItem(Integer.toString(index),group);
+            newGUI.addItem(Integer.toString(index), group);
             index++;
         }
         return newGUI;
     }
 
-    public static GUI updateUnitProducer(UnitProducer producer){
+    public static GUI updateUnitProducer(UnitProducer producer) {
         GUI newGUI = new GUI();
-        int index=0;
-        for(Tuple<List<Tuple<GameResource,Integer>>,Unit.UType> product :producer.unitCreations){
-            GUIGroup group = new GUIGroup(new Vector2f(0.8334f,1f-(index*0.0944f)));
-            GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
-            String resourceList="";
-            for(Tuple<GameResource,Integer> resource: product.getFirst()){
-                resourceList+=(resource.x.name()+": "+resource.y+"\n");
+        int index = 0;
+        for (Tuple<List<Tuple<GameResource, Integer>>, Unit.UType> product : producer.unitCreations) {
+            GUIGroup group = new GUIGroup(new Vector2f(0.8334f, 1f - (index * 0.0944f)));
+            GUIButton factory = new GUIButton(new Vector2f(0, 0), new Vector2f(0.1625f, 0.0944f), Textures.button);
+            factory.setLayer(-0.5f);
+            String resourceList = "";
+            for (Tuple<GameResource, Integer> resource : product.getFirst()) {
+                resourceList += (resource.x.name() + ": " + resource.y + "\n");
             }
-            group.addItem("name", new GUIText(Text.from(product.y.name()+"\n"+resourceList).size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
-            group.addItem("button",factory);
-            factory.setOnClick(()->{
+            group.addItem("name", new GUIText(Text.from(product.y.name() + "\n" + resourceList).size(0.2f), Textures.dFont, new Vector2f(0.01f, -0.032f)));
+            group.addItem("button", factory);
+            factory.setOnClick(() -> {
                 Empire e = Empire.get(SimonWars.side);
-                for(Tuple<GameResource,Integer> resource: product.getFirst()){
-                if(e.getAvailable(resource.x)<resource.y)return;
-            }
+                for (Tuple<GameResource, Integer> resource : product.getFirst()) {
+                    if (e.getAvailable(resource.x) < resource.y) return;
+                }
+                CommandManager.sendCommand(Command.create("unit_order", product.y.toString(), String.valueOf(producer.getId())));
             });
-            newGUI.addItem(Integer.toString(index),group);
+            newGUI.addItem(Integer.toString(index), group);
             index++;
         }
         return newGUI;
