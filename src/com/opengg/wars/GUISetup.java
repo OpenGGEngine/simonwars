@@ -16,13 +16,16 @@ import com.opengg.wars.game.GameResource;
 import java.util.List;
 
 public class GUISetup {
-    static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI,borderGUI;
+    static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI,unitSelect,borderGUI;
+
     public static void initialize(){
         borderGUI = new GUI();
         borderGUI.addItem("border", new GUITexture(Resource.getTexture("border.png"), new Vector2f(0,0), new Vector2f(1,1)));
         GUIController.add(borderGUI, "borderGUI");
 
         unitGUI = new GUI();
+        unitSelect = new GUI();
+        unitSelect.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.186667f,1)).setLayer(-0.6f));
         unitGUI.addItem("background",new GUITexture(Textures.unitMenu,new Vector2f(0.8333f,0.4768f),new Vector2f(0.16666667f,0.5207f)));
         unitGUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.82167f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
 
@@ -36,7 +39,7 @@ public class GUISetup {
         GUIGroup fgroup = new GUIGroup(new Vector2f(0.8334f,0.9056f));
         GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         factory.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 150 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 80) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 150 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 80 && 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
                 SimonWars.dragable.enable(Building.BType.FACTORY);
             }
         });
@@ -46,7 +49,7 @@ public class GUISetup {
         GUIGroup mgroup = new GUIGroup(new Vector2f(0.8334f,0.8112f));
         GUIButton mines = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         mines.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
                 SimonWars.dragable.enable(Building.BType.GOLDMINE);
             }
         });
@@ -56,7 +59,7 @@ public class GUISetup {
         GUIGroup fagroup = new GUIGroup(new Vector2f(0.8334f,0.7168f));
         GUIButton farms = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         farms.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 30 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 30) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 30 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 30&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
                 SimonWars.dragable.enable(Building.BType.FARM);
             }
         });
@@ -66,7 +69,7 @@ public class GUISetup {
         GUIGroup cgroup = new GUIGroup(new Vector2f(0.8334f,0.6224f));
         GUIButton camp = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         camp.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 20) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.FOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 20&& 0< Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
                 SimonWars.dragable.enable(Building.BType.CAMP);
             }
         });
@@ -86,7 +89,7 @@ public class GUISetup {
         GUIGroup blgroup = new GUIGroup(new Vector2f(0.8334f,0.4336f));
         GUIButton ironmine = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         ironmine.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 70 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 70 && Empire.get(SimonWars.side).getAvailable(GameResource.STONE) >= 100&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
             SimonWars.dragable.enable(Building.BType.IRONMINE);
             }
         });
@@ -96,7 +99,7 @@ public class GUISetup {
         GUIGroup qlgroup = new GUIGroup(new Vector2f(0.8334f,0.3392f));
         GUIButton quarry = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         quarry.setOnClick(() -> {
-            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 10) {
+            if(Empire.get(SimonWars.side).getAvailable(GameResource.WOOD) >= 40 && Empire.get(SimonWars.side).getAvailable(GameResource.IRON) >= 10&& 0 < Empire.get(SimonWars.side).getAvailable(GameResource.PEOPLESLOT)) {
                 SimonWars.dragable.enable(Building.BType.QUARRY);
             }
         });
@@ -275,5 +278,13 @@ public class GUISetup {
         newGUI.addItem("health",new GUIProgressBar(new Vector2f(0.85156f,0.1567f),new Vector2f(0.129675f,0.0185f),new Vector3f(1,0,0),new Vector3f(0.5f)));
         newGUI.addItem("progress",new GUIProgressBar(new Vector2f(0.85156f,0.0567f),new Vector2f(0.129675f,0.0185f),new Vector3f(0,0.2f,1),new Vector3f(0.5f)));
         return newGUI;
+    }
+    public static void updateUnitSelect(List<Unit> units) {
+        unitSelect.getRoot().clear();
+        String tokenizer = "";
+        for (Unit unit : units) {
+            tokenizer += unit.getName() + "\n" + unit.health + "/" + unit.getMaxhealth() + "\n";
+        }
+        unitSelect.getRoot().addItem("text", new GUIText(Text.from(tokenizer).size(0.2f), Textures.dFont, new Vector2f(0.851f, 0.9f)));
     }
 }
