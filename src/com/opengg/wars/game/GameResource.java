@@ -4,7 +4,7 @@ import com.opengg.core.engine.Resource;
 
 public enum GameResource {
     PEOPLE(Resource.getTexturePath("person.png")),
-    PEOPLESLOT(""),
+    PEOPLESLOT("person.png"),
     FOOD(Resource.getTexturePath("food.png")),
     WOOD(Resource.getTexturePath("wood.png")),
     STONE(Resource.getTexturePath("stone.png")),
