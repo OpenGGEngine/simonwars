@@ -16,8 +16,13 @@ import com.opengg.wars.game.GameResource;
 import java.util.List;
 
 public class GUISetup {
-    static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI,unitSelect;
+    static GUI unitGUI,builderUI,townUI,resourceUI,barracksUI,factoryUI,mainResourceUI,unitSelect,borderGUI;
+
     public static void initialize(){
+        borderGUI = new GUI();
+        borderGUI.addItem("border", new GUITexture(Resource.getTexture("border.png"), new Vector2f(0,0), new Vector2f(1,1)));
+        GUIController.add(borderGUI, "borderGUI");
+
         unitGUI = new GUI();
         unitSelect = new GUI();
         unitSelect.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.186667f,1)).setLayer(-0.6f));
