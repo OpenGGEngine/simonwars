@@ -20,6 +20,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
         var pos = FastMath.getRayPlaneIntersection(ray.getRay(), new Vector3f(0,1,0), new Vector3f(0,1,0));
         Vector2f imFloored = pos.xz();
         int x = (int)imFloored.x;int z = (int)imFloored.y;
+        if(!(x > SimonWars.map.length-1 || x<0||z<0||z>SimonWars.map[0].length-1) && SimonWars.map[x][z])
         setPositionOffset(new Vector3f(x,0,z));
     }
 

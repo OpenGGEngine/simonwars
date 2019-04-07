@@ -30,7 +30,7 @@ public class UserViewComponent extends ControlledComponent implements Actionable
     public UserViewComponent(int user){
         this.attach(new CameraComponent().setUserId(user));
         this.attach(new ActionTransmitterComponent().setUserId(user));
-        this.setPositionOffset(new Vector3f(500,25,0));
+        this.setPositionOffset(new Vector3f(500,15,0));
         this.setRotationOffset(new Vector3f(55,-135, 0));
     }
 
