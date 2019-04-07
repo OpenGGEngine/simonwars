@@ -88,7 +88,7 @@ void process(){
 
 	reflectedcolor = texture(cubemap, normalize(reflect(eyedir,n))).xyz;
 	
-	ambient = ambient * 0.2f *reflectedcolor;
+	ambient = ambient + 0.01f*reflectedcolor;
 }
 
 void main() {  

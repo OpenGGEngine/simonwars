@@ -56,13 +56,13 @@ public class MapGenerator {
                     if(alpha == 255){
                         if(red == 255){
                             SimonWars.deposits.add(Tuple.of(new Vector2i(i,j), Deposit.GOLD));
-                            thingos.add(new ModelComponent(Resource.getModel("Rock_6")).setPositionOffset(new Vector3f(i,0,j)));
+                            thingos.add(new ModelComponent(Resource.getModel("Gold")).setPositionOffset(new Vector3f(i,0,j)));
                         }else if(green == 255){
                             SimonWars.deposits.add(Tuple.of(new Vector2i(i,j), Deposit.WOOD));
-                            thingos.add(new ModelComponent(Resource.getModel("Rock_6")).setPositionOffset(new Vector3f(i,0,j)));
+                            thingos.add(new ModelComponent(Resource.getModel("tree")).setPositionOffset(new Vector3f(i,0,j)).setScaleOffset(0.0022f));
                         }else if(blue == 255){
                             SimonWars.deposits.add(Tuple.of(new Vector2i(i,j), Deposit.IRON));
-                            thingos.add(new ModelComponent(Resource.getModel("Rock_6")).setPositionOffset(new Vector3f(i,0,j)));
+                            thingos.add(new ModelComponent(Resource.getModel("Iron")).setPositionOffset(new Vector3f(i,0,j)));
                         }else{
                             SimonWars.deposits.add(Tuple.of(new Vector2i(i,j), Deposit.STONE));
                             thingos.add(new ModelComponent(Resource.getModel("Rock_6")).setPositionOffset(new Vector3f(i,0,j)));
