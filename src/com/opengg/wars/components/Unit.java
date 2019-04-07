@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 public class Unit extends GameObject{
     float speed = 8f;
 
+    BarRenderComponent bar;
+
     Attack attack = new Attack();
 
     Vector2f lastTargetPos = new Vector2f();
@@ -97,6 +99,7 @@ public class Unit extends GameObject{
                 worker.getAttack().attack = 1;
                 worker.getAttack().pierceAttack = 0;
                 worker.getAttack().range = 0;
+                worker.getAttack().speed = 1;
                 worker.attach(new SpriteRenderComponent(side + "/Worker.png").setRotationOffset(new Vector3f(-15,45,0)).setScaleOffset(3));
                 worker.visibleName = "Villager";
                 return worker;

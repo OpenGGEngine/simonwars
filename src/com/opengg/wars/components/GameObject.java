@@ -1,16 +1,22 @@
 package com.opengg.wars.components;
 
+import com.opengg.core.GGInfo;
+import com.opengg.core.math.Vector2f;
+import com.opengg.core.math.Vector3f;
 import com.opengg.core.physics.collision.AABB;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.core.world.components.Component;
+import com.opengg.wars.SimonWars;
 import com.opengg.wars.game.Empire;
 
 import java.io.IOException;
 
 public class GameObject extends Component {
     Empire.Side side;
+
+    BarRenderComponent bar;
 
     String typeName = "";
     String visibleName = "ladical";
@@ -29,6 +35,9 @@ public class GameObject extends Component {
 
     public GameObject(Empire.Side side){
         this.side = side;
+        this.attach(bar = new BarRenderComponent().setPercent(1f));
+        bar.setPositionOffset(new Vector3f(0,3f,0)).setRotationOffset(new Vector3f(-15,45,0));
+
     }
 
     public Empire.Side getSide() {
@@ -57,6 +66,10 @@ public class GameObject extends Component {
     public void update(float delta){
         if(health <=0){
             WorldEngine.markForRemoval(this);
+        }
+
+        if(GGInfo.isServer() || SimonWars.offline){
+            bar.setPercent((float)health/(float)maxhealth);
         }
     }
 
