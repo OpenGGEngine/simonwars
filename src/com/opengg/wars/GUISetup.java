@@ -162,6 +162,7 @@ public class GUISetup {
     }
     public static GUI getFactoryGUI(ResourceProducer producer){
         GUI newGUI = new GUI();
+        newGUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.186667f,1)).setLayer(-1f));
         int index = 0;
         for (Tuple<List<Tuple<GameResource, Integer>>, Tuple<GameResource, Integer>> product : producer.products) {
             GUIGroup group = new GUIGroup(new Vector2f(0.8334f, 0.9056f - (index * 0.0944f)));
@@ -186,6 +187,7 @@ public class GUISetup {
 
     public static GUI updateUnitProducer(UnitProducer producer) {
         GUI newGUI = new GUI();
+        newGUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.186667f,1)).setLayer(-1f));
         int index = 0;
         for (Tuple<List<Tuple<GameResource, Integer>>, Unit.UType> product : producer.unitCreations) {
             GUIGroup group = new GUIGroup(new Vector2f(0.8334f, 0.9056f - (index * 0.0944f)));
