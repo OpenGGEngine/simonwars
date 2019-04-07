@@ -24,11 +24,13 @@ public class GUISetup {
         unitGUI.addItem("stats",new GUIText(Text.from("Enemy Here\n\n Health: 100/100 \n\n" +
                 "Attack: 25 \n\n" + "Defense: 124").size(0.22f),Textures.dFont,new Vector2f(0.84156f,0.77167f)).setLayer(0.5f));
         GUIController.add(unitGUI,"unitGUI");
+
         builderUI = new GUI();
         builderUI.addItem("background",new GUITexture(Textures.builderMenu,new Vector2f(0.8333f,0f),new Vector2f(0.166667f,1)).setLayer(-1f));
 
         GUIGroup fgroup = new GUIGroup(new Vector2f(0.8334f,1f));
         GUIButton factory = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
+       //factory.setOnClick(() -> );
         fgroup.addItem("factory",factory.setLayer(-0.6f));
         fgroup.addItem("name", new GUIText(Text.from("Factory\nCoal:1000\nPSlots:1000").size(0.2f),Textures.dFont,new Vector2f(0.01f,-0.032f)));
         builderUI.addItem("fgroup",fgroup);

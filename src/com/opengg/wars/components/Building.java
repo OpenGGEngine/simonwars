@@ -68,7 +68,6 @@ public class Building extends GameObject{
     public void serialize(GGOutputStream out) throws IOException {
         super.serialize(out);
         out.write(complete);
-        out.write(menuOnClick);
     }
 
     @Override
@@ -80,7 +79,6 @@ public class Building extends GameObject{
     public void deserialize(GGInputStream in) throws IOException {
         super.deserialize(in);
         complete = in.readBoolean();
-        menuOnClick = in.readString();
     }
 
     @Override
