@@ -1,16 +1,25 @@
 package com.opengg.wars.components;
 
 import com.opengg.core.GGInfo;
+import com.opengg.core.util.GGInputStream;
+import com.opengg.core.util.GGOutputStream;
 import com.opengg.wars.SimonWars;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
 
+import java.io.IOException;
+
 public class Town extends Building {
     int regenRate = 300;
     private int counter = 0;
+
+    public Town(){
+
+    }
+
     public Town(Empire.Side side){
         super(side);
-        Empire.get(SimonWars.side).add(GameResource.PEOPLESLOT,6);
+        Empire.get(side).add(GameResource.PEOPLESLOT,6);
     }
     public void update(float delta){
         if(GGInfo.isServer() || SimonWars.offline){
@@ -28,5 +37,12 @@ public class Town extends Building {
             }
             counter+=1;
         }
+    }
+
+    @Override
+    public void deserialize(GGInputStream in) throws IOException {
+        super.deserialize(in);
+
+        Empire.get(this.side).add(GameResource.PEOPLESLOT,6);
     }
 }
