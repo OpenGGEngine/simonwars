@@ -123,7 +123,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
             dragable = new GhostComponent();
             dragable.setId(1293487023);
-            dragable.setModel(Resource.getModel("TheFactory"));
+            dragable.setModel(Resource.getModel("cottage"));
             dragable.setEnabled(false);
             WorldEngine.getCurrent().attach(dragable);
 
