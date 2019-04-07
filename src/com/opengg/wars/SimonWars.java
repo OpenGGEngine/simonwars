@@ -237,7 +237,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             }
         }else{
             if(SimonWars.selected.size()>0) {
-                if (SimonWars.selected.get(0) instanceof UnitProducer && SimonWars.currentSelection != null) {
+                if (SimonWars.selected.get(0) instanceof UnitProducer && SimonWars.currentSelection.getName().equals("unitProd")) {
                     ((GUIProgressBar) SimonWars.currentSelection.getRoot().getItem("progress")).setPercent(((UnitProducer) SimonWars.selected.get(0)).progress/100);
                     ((GUIProgressBar) SimonWars.currentSelection.getRoot().getItem("health")).setPercent((float)((UnitProducer) SimonWars.selected.get(0)).health/SimonWars.selected.get(0).getHealth());
                 }else if(SimonWars.selected.get(0) instanceof Unit){
