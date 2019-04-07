@@ -56,6 +56,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
                 }
                 if(!oneByResource)return;
                 CommandManager.sendCommand(Command.create("building_create",  type.toString(), x+","+z, SimonWars.side.toString()));
+                this.setPositionOffset(new Vector3f(1000,0,1000));
                 this.setEnabled(false);
             }
         }
