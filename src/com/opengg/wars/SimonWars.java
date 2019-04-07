@@ -48,7 +48,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static int[][] blockers;
     public static List<Tuple<Vector2i, Deposit>> deposits = new ArrayList<>();
 
-    public static boolean offline = false;
+    public static boolean offline = true;
     public static List<GameObject> selected = new ArrayList<>();
     public static GUI currentSelection;
 
@@ -120,6 +120,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
                 var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
+                unit.attach(new BarRenderComponent(new Vector3f(0,1f,0),new Vector2f(0.4f,0.1f),new Vector3f(1,0,0.1f),new Vector3f(0.5f)).setPercent(0.7f));
                 unit.setPositionOffset(new Vector3f(180, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);
