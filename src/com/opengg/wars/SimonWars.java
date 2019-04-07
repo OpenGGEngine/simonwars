@@ -66,7 +66,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
 
         if(GGInfo.isServer()){
 
-            OpenGG.setTargetUpdateTime(1/30f);
+            OpenGG.setTargetUpdateTime(1/20f);
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 NetworkEngine.initializeServer("yeeticus", 25565);
                 CommandManager.initialize();
@@ -81,10 +81,16 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         Resource.getTexturePath("skybox\\majestic_lf.png")), 1500f));
             MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
 
-            var unit = new Unit(Empire.Side.RED);
+            var unit = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
             unit.setPositionOffset(new Vector3f(180, 0, 5));
             unit.calculateAndUsePath(unit.getPosition().xz());
             WorldEngine.getCurrent().attach(unit);
+
+
+            var unit2 = Unit.spawn(Unit.UType.INFANTRY, Empire.Side.BLUE);
+            unit2.setPositionOffset(new Vector3f(180, 0, 20));
+            unit2.calculateAndUsePath(unit2.getPosition().xz());
+            WorldEngine.getCurrent().attach(unit2);
 
             WorldEngine.getCurrent().attach(new UserViewComponent(0));
             WorldEngine.getCurrent().attach(new UserViewComponent(1));
@@ -100,11 +106,16 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 WorldEngine.getCurrent().attach(new UserViewComponent(0));
 
-                var unit = Unit.spawn(Unit.UType.WORKER, Empire.Side.RED);
+                var unit = Unit.spawn(Unit.UType.ARCHER, Empire.Side.RED);
                 unit.setPositionOffset(new Vector3f(180, 0, 5));
                 unit.calculateAndUsePath(unit.getPosition().xz());
                 WorldEngine.getCurrent().attach(unit);
 
+
+                var unit2 = Unit.spawn(Unit.UType.INFANTRY, Empire.Side.BLUE);
+                unit2.setPositionOffset(new Vector3f(180, 0, 20));
+                unit2.calculateAndUsePath(unit2.getPosition().xz());
+                WorldEngine.getCurrent().attach(unit2);
             }else{
                 MapGenerator.generateFromMaps();
                 NetworkEngine.connect("localhost", 25565);
@@ -205,7 +216,22 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 if(selected.size() == 1){
                     if(selected.get(0) instanceof Unit){
                         var unit = (Unit) selected.get(0);
-                        CommandManager.sendCommand(Command.create("unit_move", Integer.toString(unit.getId()), pos.x + "," + pos.z));
+                        var allfound = WorldEngine.getCurrent()
+                                .getAllDescendants()
+                                .stream()
+                                .filter(c -> c instanceof GameObject)
+                                .map(c -> (GameObject)c)
+                                .filter(c -> c.getSide() != side)
+                                .filter(c -> FastMath.closestPointTo(ray.getPos(), ray.getPos().add(ray.getDir()), c.getPosition(), false).distanceTo(c.getPosition()) < c.getColliderWidth())
+                                .collect(Collectors.toList());
+
+                        if(!allfound.isEmpty()){
+                            CommandManager.sendCommand(Command.create("unit_attack", Integer.toString(unit.getId()), Integer.toString(allfound.get(0).getId())));
+                        }else{
+                            CommandManager.sendCommand(Command.create("unit_move", Integer.toString(unit.getId()), pos.x + "," + pos.z));
+
+                        }
+
                     }else if(selected.get(0) instanceof UnitProducer){
                         var prod = (UnitProducer) selected.get(0);
                         CommandManager.sendCommand(Command.create("dropoff_set", Integer.toString(prod.getId()), pos.x + "," + pos.z));

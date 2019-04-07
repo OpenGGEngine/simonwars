@@ -11,4 +11,9 @@ public class SpriteRenderComponent  extends RenderComponent {
         this.setDrawable(new TexturedDrawnObject(ObjectCreator.createSquare(new Vector2f(-0.5f,0), new Vector2f(0.5f,1), 0), Resource.getTexture("map1.png")));
         this.setShader("object");
     }
+
+    public SpriteRenderComponent(String path){
+        this.setDrawable(new TexturedDrawnObject(ObjectCreator.createSquare(new Vector2f(-0.5f,0), new Vector2f(0.5f,1), 0), Resource.getTexture(path)));
+        this.setShader("object");
+    }
 }

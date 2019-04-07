@@ -47,6 +47,10 @@ public class GameObject extends Component {
         return colliderWidth;
     }
 
+    public void kill(){
+        WorldEngine.markForRemoval(this);
+    }
+
     public void update(float delta){
         if(health <=0){
             WorldEngine.markForRemoval(this);

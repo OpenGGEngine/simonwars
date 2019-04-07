@@ -4,6 +4,7 @@ import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.world.WorldEngine;
 import com.opengg.wars.components.Building;
+import com.opengg.wars.components.GameObject;
 import com.opengg.wars.components.Unit;
 import com.opengg.wars.components.UnitProducer;
 import com.opengg.wars.game.Empire;
@@ -14,14 +15,25 @@ public class CommandParser {
         CommandManager.registerCommandUser("dropoff_set", CommandParser::parseDropoffPointSet);
         CommandManager.registerCommandUser("building_create", CommandParser::parseBuildingCreate);
         CommandManager.registerCommandUser("unit_order", CommandParser::parseUnitOrder);
+        CommandManager.registerCommandUser("unit_attack", CommandParser::parseUnitAttack);
     }
 
     public static void parseUnitMove(Command unit){
         var unitId = Integer.parseInt(unit.args.get(0));
         var unitComp = (Unit)WorldEngine.getCurrent().find(unitId);
         var newLoc = Vector2f.parseVector2f(unit.args.get(1));
-        if(SimonWars.map[(int) newLoc.x] [(int) newLoc.y])
+        if(SimonWars.map[(int) newLoc.x] [(int) newLoc.y]) {
+            unitComp.target = null;
             unitComp.calculateAndUsePath(newLoc);
+        }
+    }
+
+    public static void parseUnitAttack(Command unit){
+        var unitId = Integer.parseInt(unit.args.get(0));
+        var unitComp = (Unit)WorldEngine.getCurrent().find(unitId);
+        var targetId = Integer.parseInt(unit.args.get(1));
+        var target = (GameObject)WorldEngine.getCurrent().find(targetId);
+        unitComp.target = target;
     }
 
     public static void parseDropoffPointSet(Command point){
