@@ -6,6 +6,7 @@ import com.opengg.core.io.input.mouse.MouseController;
 import com.opengg.core.math.FastMath;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
+import com.opengg.core.render.RenderEngine;
 import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.components.Building;
 import com.opengg.wars.game.Empire;
@@ -14,6 +15,11 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
     Building.BType type = Building.BType.FACTORY;
 
     public Vector2f[] collisions = {new Vector2f(0,0)};
+
+    public GhostComponent(){
+        this.setFormat(RenderEngine.tangentVAOFormat);
+        this.setTransparency(true);
+    }
 
     @Override
     public void update(float delta){

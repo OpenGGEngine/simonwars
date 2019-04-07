@@ -1,8 +1,10 @@
 package com.opengg.wars.components;
 
+import com.opengg.core.GGInfo;
 import com.opengg.core.math.Tuple;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
+import com.opengg.wars.SimonWars;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class ResourceProducer extends Building{
     public List<Tuple<List<Tuple<GameResource, Integer>>, Tuple<GameResource, Integer>>> products = new ArrayList<>();
 
+    float timer = 0;
 
     boolean outSet = false;
     boolean inSet = false;
@@ -32,7 +35,20 @@ public class ResourceProducer extends Building{
 
     @Override
     public void update(float delta){
-
+        if(GGInfo.isServer() || SimonWars.offline){
+            timer += delta;
+            if(timer > 1){
+                timer = 0;
+                for(var product : products){
+                    var works = product.x.stream()
+                            .allMatch(c -> Empire.get(side).getAvailable(c.x) >= c.y);
+                    if(works){
+                        product.x.forEach(c -> Empire.get(side).use(c.x,c.y));
+                        Empire.get(side).add(product.y.x, product.y.y);
+                    }
+                }
+            }
+        }
     }
 
     @Override

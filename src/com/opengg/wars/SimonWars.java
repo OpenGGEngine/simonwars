@@ -183,7 +183,6 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                         }else if(allfound.get(0) instanceof UnitProducer){
                             currentSelection = GUISetup.updateUnitProducer((UnitProducer) allfound.get(0));
                             GUIController.addAndUse(currentSelection, "unitProd");
-                            System.out.println(currentSelection.getName());
                         }else if(allfound.get(0) instanceof ResourceProducer){
                             currentSelection = GUISetup.getFactoryGUI((ResourceProducer) allfound.get(0));
                             GUIController.addAndUse(currentSelection, "producer");
