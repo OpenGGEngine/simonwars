@@ -1,7 +1,5 @@
 package com.opengg.wars.components;
 
-import com.opengg.core.math.Quaternionf;
-import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.math.Vector3fm;
 import com.opengg.core.util.GGInputStream;
@@ -11,7 +9,6 @@ import com.opengg.core.world.ActionType;
 import com.opengg.core.world.Actionable;
 import com.opengg.core.world.components.ActionTransmitterComponent;
 import com.opengg.core.world.components.CameraComponent;
-import com.opengg.core.world.components.Component;
 import com.opengg.core.world.components.ControlledComponent;
 
 import java.io.IOException;
@@ -32,6 +29,7 @@ public class UserViewComponent extends ControlledComponent implements Actionable
         this.attach(new ActionTransmitterComponent().setUserId(user));
         this.setPositionOffset(new Vector3f(180,15,0));
         this.setRotationOffset(new Vector3f(55,-135, 0));
+        this.setSerializableUpdate(false);
     }
 
     @Override

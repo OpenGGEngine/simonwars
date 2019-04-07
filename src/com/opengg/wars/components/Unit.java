@@ -54,7 +54,7 @@ public class Unit extends GameObject{
                 infantry.getAttack().pierceAttack = 0;
                 infantry.getAttack().range = 0;
                 infantry.getAttack().speed = 0.5f;
-                infantry.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
+                infantry.attach(new SpriteRenderComponent(side + "/Infantry.png").setRotationOffset(new Vector3f(-10,45,0)).setScaleOffset(3));
                 infantry.visibleName = "Infantry";
                 return infantry;
             case CAVALRY:
@@ -68,7 +68,7 @@ public class Unit extends GameObject{
                 cavalry.getAttack().pierceAttack = 0;
                 cavalry.getAttack().range = 0;
                 cavalry.getAttack().speed = 1f;
-                cavalry.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
+                cavalry.attach(new SpriteRenderComponent(side + "/Cavalry.png").setRotationOffset(new Vector3f(-10,45,0)).setScaleOffset(5));
                 cavalry.visibleName = "Cavalry";
                 return cavalry;
             case ARCHER:
@@ -82,7 +82,7 @@ public class Unit extends GameObject{
                 archer.getAttack().pierceAttack = 5;
                 archer.getAttack().range = 6;
                 archer.getAttack().speed = 2f;
-                archer.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
+                archer.attach(new SpriteRenderComponent(side + "/Archer.png").setRotationOffset(new Vector3f(-10,45,0)).setScaleOffset(3));
                 archer.visibleName = "Archer";
                 return archer;
             case WORKER:
@@ -94,23 +94,24 @@ public class Unit extends GameObject{
                 worker.getAttack().attack = 1;
                 worker.getAttack().pierceAttack = 0;
                 worker.getAttack().range = 0;
-                worker.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
+                worker.attach(new SpriteRenderComponent(side + "/Worker.png").setRotationOffset(new Vector3f(-10,45,0)).setScaleOffset(3));
                 worker.visibleName = "Villager";
                 return worker;
         }
         return null;
     }
 
+
+    @Override
     public void whenAttackedBy(Unit unit){
+        super.whenAttackedBy(unit);
         if(target == null) target = unit;
     }
 
     public void attack(GameObject unit){
         unit.health=Math.max(0,unit.health-Math.max(0,Math.max(attack.pierceAttack - unit.pierceArmor,1)));
         unit.health=Math.max(0,unit.health-Math.max(0,Math.max(attack.attack- unit.armor ,1)));
-        if(unit instanceof Unit){
-            ((Unit)unit).whenAttackedBy(this);
-        }
+        unit.whenAttackedBy(this);
         if(unit.health < 0){
             unit.kill();
             this.target = null;

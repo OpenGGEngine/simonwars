@@ -51,6 +51,9 @@ public class GameObject extends Component {
         WorldEngine.markForRemoval(this);
     }
 
+    public void whenAttackedBy(Unit unit){
+    }
+
     public void update(float delta){
         if(health <=0){
             WorldEngine.markForRemoval(this);
