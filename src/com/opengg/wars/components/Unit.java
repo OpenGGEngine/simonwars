@@ -94,7 +94,7 @@ public class Unit extends GameObject{
                 worker.getAttack().attack = 1;
                 worker.getAttack().pierceAttack = 0;
                 worker.getAttack().range = 0;
-                worker.attach(new SpriteRenderComponent(side + "/Worker.png").setRotationOffset(new Vector3f(-15,45,0)).setScaleOffset(3));
+                worker.attach(new SpriteRenderComponent(side + "/Villager.png").setRotationOffset(new Vector3f(-15,45,0)).setScaleOffset(3));
                 worker.visibleName = "Villager";
                 return worker;
         }
