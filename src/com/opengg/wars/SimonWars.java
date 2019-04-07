@@ -127,7 +127,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 WorldEngine.getCurrent().attach(unit2);
             }else{
                 MapGenerator.generateFromMaps();
-                NetworkEngine.connect("localhost", 25565);
+                NetworkEngine.connect("10.56.90.42", 25565);
                 NetworkEngine.getReceiver().addProcessor(EMPIRE_SEND_PACKET, this::updateEmpires);
                 side = GGInfo.getUserId() == 0 ? Empire.Side.RED : Empire.Side.BLUE;
             }
@@ -143,6 +143,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             BindController.addBind(ControlType.KEYBOARD, "lookup", KEY_UP);
             BindController.addBind(ControlType.KEYBOARD, "lookdown", KEY_DOWN);
             BindController.addBind(ControlType.KEYBOARD, "aim", KEY_K);
+            BindController.addBind(ControlType.KEYBOARD, "esc", KEY_ESCAPE);
             Textures.loadTextures();
             GUISetup.initialize();
 

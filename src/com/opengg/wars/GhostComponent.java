@@ -9,6 +9,7 @@ import com.opengg.core.world.components.ModelComponent;
 import com.opengg.wars.components.Building;
 import com.opengg.wars.game.Deposit;
 import com.opengg.wars.game.Empire;
+import com.opengg.wars.game.GameResource;
 
 import java.util.List;
 
@@ -56,8 +57,44 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
                 }
                 if(!oneByResource)return;
                 CommandManager.sendCommand(Command.create("building_create",  type.toString(), x+","+z, SimonWars.side.toString()));
+                SimonWars.map[x][z] = false;
                 this.setPositionOffset(new Vector3f(1000,0,1000));
                 this.setEnabled(false);
+                switch (type){
+                    case FACTORY:
+                        Empire.get(SimonWars.side).use(GameResource.IRON,150);
+                        Empire.get(SimonWars.side).use(GameResource.WOOD,80);
+                        break;
+                    case GOLDMINE:
+                        Empire.get(SimonWars.side).use(GameResource.IRON,40);
+                        Empire.get(SimonWars.side).use(GameResource.STONE,100);
+                        break;
+                    case QUARRY:
+                        Empire.get(SimonWars.side).use(GameResource.WOOD,40);
+                        Empire.get(SimonWars.side).use(GameResource.IRON,10);
+                        break;
+                    case TOWN:
+                        Empire.get(SimonWars.side).use(GameResource.ENTERTAINMENT,40);
+                        Empire.get(SimonWars.side).use(GameResource.WOOD,150);
+                        break;
+                    case IRONMINE:
+                        Empire.get(SimonWars.side).use(GameResource.WOOD,70);
+                        Empire.get(SimonWars.side).use(GameResource.STONE,100);
+                        break;
+                    case CAMP:
+                        Empire.get(SimonWars.side).use(GameResource.FOOD,40);
+                        Empire.get(SimonWars.side).use(GameResource.WOOD,20);
+                        break;
+                    case BARRACKS:
+                        Empire.get(SimonWars.side).use(GameResource.IRON,40);
+                        Empire.get(SimonWars.side).use(GameResource.FOOD,60);
+                        break;
+                    case FARM:
+                        Empire.get(SimonWars.side).use(GameResource.IRON,30);
+                        Empire.get(SimonWars.side).use(GameResource.WOOD,30);
+                        break;
+
+                }
             }
         }
     }
@@ -68,22 +105,34 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
             case FACTORY:
                 setModel(Models.factory);
                 setScaleOffset(1f);
+                setRotationOffset(new Vector3f(0));
+                break;
+            case BARRACKS:
+                setModel(Models.barrack);
+                setScaleOffset(0.02f);
+                setRotationOffset(new Vector3f(90,0,0));
                 break;
             case QUARRY:
             case IRONMINE:
             case GOLDMINE:
                 setModel(Models.mine);
                 setRotationOffset(new Vector3f(180,90,180));
-                setScaleOffset(0.001f);
+                setScaleOffset(0.1f);
+                break;
+            case CAMP:
+                setModel(Models.forestCamp);
+                setScaleOffset(0.009f);
+                setRotationOffset(new Vector3f(0));
                 break;
             case TOWN:
                 setModel(Models.house);
-                setRotationOffset(new Vector3f(0,0,90));
-                setScaleOffset(1f);
+                setRotationOffset(new Vector3f(270,180,180));
+                setScaleOffset(0.5f);
                 break;
             case FARM:
-                setModel(Models.house);
+                setModel(Models.farm);
                 setScaleOffset(1f);
+                setRotationOffset(new Vector3f(0,0,-90));
                 break;
         }
         this.setEnabled(true);

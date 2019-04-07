@@ -28,8 +28,8 @@ public class MapGenerator {
 
         var terrainComp = new TerrainComponent(terrain);
         terrainComp.setScaleOffset(new Vector3f(192,1,192));
-        terrainComp.setBlotmap(Resource.getTexture("blend1.png"));
-        terrainComp.setGroundArray(Texture.create(Texture.arrayConfig(), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png")));
+        terrainComp.setBlotmap(Resource.getTexture("blot.png"));
+        terrainComp.setGroundArray(Texture.create(Texture.arrayConfig(), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("bettergrass.png"), Resource.getTextureData("sand.png"), Resource.getTextureData("road.png")));
 
         var thingos = new ArrayList<Component>();
         try {
@@ -86,7 +86,7 @@ public class MapGenerator {
                 new Vector3f(1,1,1)));
 
         WaterComponent water = new WaterComponent(Resource.getTexture("water.jpg").getData().get(0),1000f);
-        water.setPositionOffset(new Vector3f(0,-1,0));
+        water.setPositionOffset(new Vector3f(0,-2,0));
         WorldEngine.getCurrent().attach(water);
         return Stream.concat(List.of(terrainComp.setPositionOffset(0,5,0), water,light).stream(), thingos.stream()).collect(Collectors.toList());
     }

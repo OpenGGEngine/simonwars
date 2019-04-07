@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ResourceProducer extends Building{
     public List<Tuple<List<Tuple<GameResource, Integer>>, Tuple<GameResource, Integer>>> products = new ArrayList<>();
+    public int selected=0;
 
     float timer = 0;
 
@@ -39,14 +40,13 @@ public class ResourceProducer extends Building{
             timer += delta;
             if(timer > 1){
                 timer = 0;
-                for(var product : products){
+                var product = products.get(selected);
                     var works = product.x.stream()
                             .allMatch(c -> Empire.get(side).getAvailable(c.x) >= c.y);
                     if(works){
                         product.x.forEach(c -> Empire.get(side).use(c.x,c.y));
                         Empire.get(side).add(product.y.x, product.y.y);
                     }
-                }
             }
         }
     }
