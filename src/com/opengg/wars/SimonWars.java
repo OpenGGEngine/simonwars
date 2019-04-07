@@ -40,6 +40,7 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public static GUI currentSelection;
 
     public static Empire.Side side = Empire.Side.RED;
+    private GhostComponent dragable;
 
     public static void main(String... args){
         if(args.length > 0 && args[0].equals("server")){
@@ -57,8 +58,11 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
     public void setup() {
         CommandParser.initialize();
         Empire.initialize();
+        Models.init();
+
         if(GGInfo.isServer()){
-                OpenGG.setTargetUpdateTime(1/30f);
+
+            OpenGG.setTargetUpdateTime(1/30f);
                 MapGenerator.generateFromMaps().forEach(c -> WorldEngine.getCurrent().attach(c));
                 NetworkEngine.initializeServer("yeeticus", 25565);
                 CommandManager.initialize();
@@ -81,7 +85,6 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             WorldEngine.getCurrent().attach(new UserViewComponent(0));
             WorldEngine.getCurrent().attach(new UserViewComponent(1));
         }else{
-            Models.init();
 
             if(offline){
                 WorldEngine.getCurrent().getRenderEnvironment().setSkybox(new Skybox(Texture.getSRGBCubemap(Resource.getTexturePath("skybox\\majestic_ft.png"),
@@ -99,9 +102,9 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
                 WorldEngine.getCurrent().attach(unit);
 
             }else{
+                MapGenerator.generateFromMaps();
                 NetworkEngine.connect("localhost", 25565);
                 side = GGInfo.getUserId() == 0 ? Empire.Side.RED : Empire.Side.BLUE;
-                System.out.println(side);
             }
 
             BindController.addBind(ControlType.KEYBOARD, "forward", KEY_W);
@@ -118,7 +121,8 @@ public class SimonWars extends GGApplication implements MouseButtonListener {
             Textures.loadTextures();
             GUISetup.initialize();
 
-            GhostComponent dragable = new GhostComponent();
+            dragable = new GhostComponent();
+            dragable.setId(1293487023);
             dragable.setModel(Resource.getModel("TheFactory"));
             dragable.enable(Building.BType.BARRACKS);
             WorldEngine.getCurrent().attach(dragable);

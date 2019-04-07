@@ -44,14 +44,32 @@ public class Unit extends GameObject{
     public static Unit spawn(UType type, Empire.Side side){
         switch (type) {
             case INFANTRY:
-                Unit unit = new Unit(side);
-                unit.armor = 4;
-                unit.pierceArmor = 3;
-                unit.getAttack().attack = 4;
-                unit.getAttack().pierceAttack = 0;
-                unit.getAttack().range = 0;
-                unit.attach(new SpriteRenderComponent());
-                return unit;
+                Unit infantry = new Unit(side);
+                infantry.armor = 4;
+                infantry.pierceArmor = 3;
+                infantry.getAttack().attack = 4;
+                infantry.getAttack().pierceAttack = 0;
+                infantry.getAttack().range = 0;
+                infantry.attach(new SpriteRenderComponent());
+                return infantry;
+            case CAVALRY:
+                Unit cavalry = new Unit(side);
+                cavalry.armor = 4;
+                cavalry.pierceArmor = 3;
+                cavalry.getAttack().attack = 4;
+                cavalry.getAttack().pierceAttack = 0;
+                cavalry.getAttack().range = 0;
+                cavalry.attach(new SpriteRenderComponent());
+                return cavalry;
+            case ARCHER:
+                Unit archer = new Unit(side);
+                archer.armor = 4;
+                archer.pierceArmor = 3;
+                archer.getAttack().attack = 4;
+                archer.getAttack().pierceAttack = 0;
+                archer.getAttack().range = 0;
+                archer.attach(new SpriteRenderComponent());
+                return archer;
         }
         return null;
     }

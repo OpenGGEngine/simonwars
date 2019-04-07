@@ -1,11 +1,13 @@
 package com.opengg.wars.components;
 
 import com.opengg.core.GGInfo;
+import com.opengg.core.engine.OpenGG;
 import com.opengg.core.math.Tuple;
 import com.opengg.core.math.Vector2f;
 import com.opengg.core.math.Vector3f;
 import com.opengg.core.util.GGInputStream;
 import com.opengg.core.util.GGOutputStream;
+import com.opengg.core.world.WorldEngine;
 import com.opengg.wars.SimonWars;
 import com.opengg.wars.game.Empire;
 import com.opengg.wars.game.GameResource;
@@ -40,11 +42,12 @@ public class UnitProducer extends Building{
     }
 
     public void spawnUnit(Unit.UType type){
-        System.out.println(type);
+        if(dropoffPoint == null) dropoffPoint = this.getPosition().add(new Vector3f(3,0,0)).xz();
         var data = unitCreations.stream().filter(c -> c.y == type).findFirst().get();
         var canMake = data.x.stream()
                 .allMatch(p -> Empire.get(this.side).getAvailable(p.x) > p.y);
         if(canMake)
+            data.x.forEach(p -> Empire.get(this.side).use(p.x,p.y));
             unitQueue.add(type);
     }
 
@@ -52,7 +55,6 @@ public class UnitProducer extends Building{
     public void update(float delta)  {
         if(GGInfo.isServer() || SimonWars.offline) {
             if(!unitQueue.isEmpty()){
-                System.out.println(progress);
                 progress += delta * 30;
                 if(progress > 100){
                     progress = 0;
@@ -62,6 +64,7 @@ public class UnitProducer extends Building{
                     var unit = Unit.spawn(unitType, this.side);
                     unit.setPositionOffset(this.getPositionOffset().add(new Vector3f(3,0,0)));
                     unit.calculateAndUsePath(dropoffPoint);
+                    OpenGG.asyncExec(() -> WorldEngine.getCurrent().attach(unit));
                 }
             }
         }

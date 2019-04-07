@@ -14,6 +14,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
     Building.BType type = Building.BType.FACTORY;
 
     public Vector2f[] collisions = {new Vector2f(0,0)};
+
     @Override
     public void update(float delta){
         var ray = MouseController.getRay();
@@ -26,6 +27,7 @@ public class GhostComponent extends ModelComponent implements MouseButtonListene
 
     @Override
     public void onButtonPress(int button) {
+
         if(!isEnabled()) return;
         if(button == MouseButton.LEFT){
             for(Vector2f check:collisions){
