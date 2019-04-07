@@ -37,7 +37,6 @@ public class Unit extends GameObject{
 
     public Unit(Empire.Side side) {
         super(side);
-        this.attach(new ModelComponent(Resource.getModel("pear")));
     }
 
     public static Unit spawn(UType type, Empire.Side side){
@@ -49,7 +48,7 @@ public class Unit extends GameObject{
                 infantry.getAttack().attack = 4;
                 infantry.getAttack().pierceAttack = 0;
                 infantry.getAttack().range = 0;
-                infantry.attach(new SpriteRenderComponent());
+                infantry.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
                 return infantry;
             case CAVALRY:
                 Unit cavalry = new Unit(side);
@@ -58,7 +57,7 @@ public class Unit extends GameObject{
                 cavalry.getAttack().attack = 4;
                 cavalry.getAttack().pierceAttack = 0;
                 cavalry.getAttack().range = 0;
-                cavalry.attach(new SpriteRenderComponent());
+                cavalry.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
                 return cavalry;
             case ARCHER:
                 Unit archer = new Unit(side);
@@ -67,7 +66,7 @@ public class Unit extends GameObject{
                 archer.getAttack().attack = 4;
                 archer.getAttack().pierceAttack = 0;
                 archer.getAttack().range = 0;
-                archer.attach(new SpriteRenderComponent());
+                archer.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
                 return archer;
             case WORKER:
                 Villager worker = new Villager(side);
@@ -76,7 +75,7 @@ public class Unit extends GameObject{
                 worker.getAttack().attack = 4;
                 worker.getAttack().pierceAttack = 0;
                 worker.getAttack().range = 0;
-                worker.attach(new SpriteRenderComponent());
+                worker.attach(new SpriteRenderComponent().setRotationOffset(new Vector3f(0,45,0)).setScaleOffset(2));
                 return worker;
         }
         return null;
@@ -109,7 +108,7 @@ public class Unit extends GameObject{
     }
 
     public void calculateAndUsePath(Vector2f pos){
-        var star = new AStar(512,512, new Node((int)getPosition().x, (int)getPosition().z), new Node((int)pos.x,(int)pos.y));
+        var star = new AStar(192,192, new Node((int)getPosition().x, (int)getPosition().z), new Node((int)pos.x,(int)pos.y));
         star.setBlocks(SimonWars.blockers);
         var info = star.findPath().stream().map(n -> new Vector2f(n.getRow(), n.getCol())).collect(Collectors.toList());
         setNewPath(info);
