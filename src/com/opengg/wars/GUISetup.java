@@ -46,6 +46,7 @@ public class GUISetup {
         fgroup.addItem("factory",factory.setLayer(-0.6f));
         fgroup.addItem("name", new GUIText(Text.from("Factory\nIron:150\nWood:80").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("fgroup",fgroup);
+
         GUIGroup mgroup = new GUIGroup(new Vector2f(0.8334f,0.8112f));
         GUIButton mines = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         mines.setOnClick(() -> {
@@ -56,6 +57,7 @@ public class GUISetup {
         mgroup.addItem("mines",mines.setLayer(-0.6f));
         mgroup.addItem("name", new GUIText(Text.from("Gold Mine\nStone:100\nIron:40").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("mgroup",mgroup);
+
         GUIGroup fagroup = new GUIGroup(new Vector2f(0.8334f,0.7168f));
         GUIButton farms = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         farms.setOnClick(() -> {
@@ -66,6 +68,7 @@ public class GUISetup {
         fagroup.addItem("farms",farms.setLayer(-0.6f));
         fagroup.addItem("name", new GUIText(Text.from("Farms\nIron:30\nWood:30").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("magroup",fagroup);
+
         GUIGroup cgroup = new GUIGroup(new Vector2f(0.8334f,0.6224f));
         GUIButton camp = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         camp.setOnClick(() -> {
@@ -76,6 +79,7 @@ public class GUISetup {
         cgroup.addItem("camps",camp.setLayer(-0.6f));
         cgroup.addItem("name", new GUIText(Text.from("Camps\nFood:40\nWood:20").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("cgroup",cgroup);
+
         GUIGroup bgroup = new GUIGroup(new Vector2f(0.8334f,0.528f));
         GUIButton barracks = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         barracks.setOnClick(() -> {
@@ -86,6 +90,7 @@ public class GUISetup {
         bgroup.addItem("barracks",barracks.setLayer(-0.6f));
         bgroup.addItem("name", new GUIText(Text.from("Barracks\nIron:40\nFood:60").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("bgroup",bgroup);
+
         GUIGroup blgroup = new GUIGroup(new Vector2f(0.8334f,0.4336f));
         GUIButton ironmine = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         ironmine.setOnClick(() -> {
@@ -96,6 +101,7 @@ public class GUISetup {
         blgroup.addItem("ironmine",ironmine.setLayer(-0.6f));
         blgroup.addItem("name", new GUIText(Text.from("Iron Mine\nWood:70\nStone:100").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("blgroup",blgroup);
+
         GUIGroup qlgroup = new GUIGroup(new Vector2f(0.8334f,0.3392f));
         GUIButton quarry = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         quarry.setOnClick(() -> {
@@ -106,6 +112,7 @@ public class GUISetup {
         qlgroup.addItem("quarry",quarry.setLayer(-0.6f));
         qlgroup.addItem("name", new GUIText(Text.from("Quarry\nWood:40\nIron:10").size(0.2f),Textures.dFont, new Vector2f(0.01f, 0.06f)));
         builderUI.addItem("qlgroup",qlgroup);
+
         GUIGroup tgroup = new GUIGroup(new Vector2f(0.8334f,0.2448f));
         GUIButton town = new GUIButton(new Vector2f(0,0),new Vector2f(0.1625f,0.0944f),Textures.button);
         town.setOnClick(() -> {

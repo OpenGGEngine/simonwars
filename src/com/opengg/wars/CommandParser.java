@@ -55,14 +55,17 @@ public class CommandParser {
             case FACTORY:
                 Empire.get(side).use(GameResource.IRON,150);
                 Empire.get(side).use(GameResource.WOOD,80);
+                Empire.get(side).occupiedSlots++;
                 break;
             case GOLDMINE:
                 Empire.get(side).use(GameResource.IRON,40);
                 Empire.get(side).use(GameResource.STONE,100);
+                Empire.get(side).occupiedSlots++;
                 break;
             case QUARRY:
                 Empire.get(side).use(GameResource.WOOD,40);
                 Empire.get(side).use(GameResource.IRON,10);
+                Empire.get(side).occupiedSlots++;
                 break;
             case TOWN:
                 Empire.get(side).use(GameResource.ENTERTAINMENT,40);
@@ -71,10 +74,12 @@ public class CommandParser {
             case IRONMINE:
                 Empire.get(side).use(GameResource.WOOD,70);
                 Empire.get(side).use(GameResource.STONE,100);
+                Empire.get(side).occupiedSlots++;
                 break;
             case CAMP:
                 Empire.get(side).use(GameResource.FOOD,40);
                 Empire.get(side).use(GameResource.WOOD,20);
+                Empire.get(side).occupiedSlots++;
                 break;
             case BARRACKS:
                 Empire.get(side).use(GameResource.IRON,40);
@@ -83,8 +88,8 @@ public class CommandParser {
             case FARM:
                 Empire.get(side).use(GameResource.IRON,30);
                 Empire.get(side).use(GameResource.WOOD,30);
+                Empire.get(side).occupiedSlots++;
                 break;
-
         }
         buildingComp.setPositionOffset(new Vector3f(loc.x, 0, loc.y));
         WorldEngine.getCurrent().attach(buildingComp);
